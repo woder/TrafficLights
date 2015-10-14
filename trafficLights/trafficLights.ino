@@ -1,7 +1,7 @@
 int trafficLights1[] = {2,3,4};	// red, yellow, green, pedestrians led pins
 int trafficLights2[] = {5,6,7};	// red, yellow, green, pedestrians led pins
 int situations = 4;
-int duration[] = {8000,3000,10000,3000}; // duration of each situation
+int duration[] = {8000, 3000, 10000, 3000}; // duration of each situation
 long previousCars = 0;
 long previousPeds = 0;
 long interval = 300;	//blink interval for pedestrians
@@ -10,7 +10,7 @@ int state;
 int i = 0;
  
 void setup() {
-  for(int i = 0; i < 4; i++) {
+  for(int i = 0; i < 3; i++) {
 	  pinMode(trafficLights1[i], OUTPUT);
 	  pinMode(trafficLights2[i], OUTPUT);
   }
