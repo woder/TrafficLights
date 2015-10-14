@@ -9,8 +9,7 @@ int ledState = LOW;
 int state;
 int i = 0;
  
-void setup()
-{
+void setup() {
   for(int i = 0; i < 4; i++) {
 	  pinMode(trafficLights1[i], OUTPUT);
 	  pinMode(trafficLights2[i], OUTPUT);
@@ -18,8 +17,7 @@ void setup()
 	Serial.begin(9600);
 }
  
-void loop()
-{	
+void loop() {	
 	unsigned long currentMillis = millis();		
 	if(currentMillis - previousCars < duration[i]) {			
 		situation(i);		
@@ -27,16 +25,14 @@ void loop()
 		previousCars = currentMillis; 
 		if(i >= situations) {
 			i = 0;
-			} else {
+		} else {
 			i++;
 		}		
 	}
 }
  
-void activateTrafficLight1(String lights, int pedestrians) 
-{	
-	for(int x = 0; x < 3; x++) 
-	{
+void activateTrafficLight1(String lights, int pedestrians) {	
+	for(int x = 0; x < 3; x++) {
 		if(lights[x] == '0') state = LOW;
 		if(lights[x] == '1') state = HIGH;
 		digitalWrite(trafficLights1[x], state);	
@@ -48,10 +44,8 @@ void activateTrafficLight1(String lights, int pedestrians)
 	}
 }
  
-void activateTrafficLight2(String lights, int pedestrians)
-{	
-	for(int x = 0; x < 3; x++)
-	{
+void activateTrafficLight2(String lights, int pedestrians) {	
+	for(int x = 0; x < 3; x++) {
 		if(lights[x] == '0') state = LOW;
 		if(lights[x] == '1') state = HIGH;
 		digitalWrite(trafficLights2[x], state);
@@ -63,9 +57,8 @@ void activateTrafficLight2(String lights, int pedestrians)
 	}
 }
  
-void situation(int i)
-{
-	switch(i){
+void situation(int i) {
+	switch(i) {
 		case 0: 
 			activateTrafficLight1("100",1); // 100 means red ON, yellow OFF, green OFF
 			activateTrafficLight2("001",0); // the second parameter is for pedestrians
