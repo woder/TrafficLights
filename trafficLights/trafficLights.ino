@@ -1,7 +1,7 @@
-int trafficLights1[] = {2,3,4,5,6};	// red, yellow, green, pedestrians led pins
-int trafficLights2[] = {7,8,9,10,11};	// red, yellow, green, pedestrians led pins
+int trafficLights1[] = {2, 3, 4, 5, 6};	// red, yellow, green, pedestrians led pins
+int trafficLights2[] = {7, 8, 9, 10, 11};	// red, yellow, green, pedestrians led pins
 int situations = 4;
-int duration[] = {8000,3000,10000,3000}; // duration of each situation
+int duration[] = {8000, 3000, 10000, 3000}; // duration of each situation
 long previousCars = 0;
 long previousPeds = 0;
 long interval = 300;	//blink interval for pedestrians
