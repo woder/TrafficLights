@@ -64,11 +64,11 @@ void activateTrafficLight2(String lights, int pedestrians) {
 void situation(int i) {
 	switch(i) {
 		case 0:
-			activateTrafficLight1("100", 1); // 100 means red ON, yellow OFF, green OFF
-			activateTrafficLight2("001", 0); // the second parameter is for pedestrians
-			break;							// 1 is ON and 0 is OFF
+			activateTrafficLight1("100", 1);  // 100 means red ON, yellow OFF, green OFF
+			activateTrafficLight2("001", 0);  // the second parameter is for pedestrians
+			break;							              // 1 is ON and 0 is OFF
 		case 1:
-			activateTrafficLight1("110", 0); // 110: red ON, yellow ON, green OFF
+			activateTrafficLight1("110", 0);  // 110: red ON, yellow ON, green OFF
 			activateTrafficLight2("010", 0);
 			break;
 		case 2:
