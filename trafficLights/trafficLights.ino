@@ -23,7 +23,7 @@ void loop() {
 	if(currentMillis - previousCars < duration[i]) { //if the current time minus the last time we changed scene is less than the required duration to change scene, then just tick the scene in question
 		situation(i); //tick the scene
 	} else {
-		previousCars = currentMillis //reset the time to the current time, since we have just changed the scene
+		previousCars = currentMillis; //reset the time to the current time, since we have just changed the scene
 		if(i >= situations) { //if we passed the maximum amount of scenes, then reset to 0
 			i = 0;
 		} else {
@@ -40,13 +40,13 @@ void activateTrafficLight1(String lights, int pedestrians) {
 	}
 	if(pedestrians == 1) {
                 digitalWrite(trafficLights1[4], LOW);
-		digitalWrite(trafficLights[3], HIGH);
-        } else if(pedestrians == 2){
-               digitalWrite(trafficLights[3], LOW);
-               blinkPed(trafficLights1[4]);
+		            digitalWrite(trafficLights1[3], HIGH);
+  } else if(pedestrians == 2){
+                digitalWrite(trafficLights1[3], LOW);
+                blinkPed(trafficLights1[4]);
 	} else {
-		digitalWrite(trafficLights1[3], LOW);
-               digitalWrite(trafficLights1[4], HIGH);
+		            digitalWrite(trafficLights1[3], LOW);
+                digitalWrite(trafficLights1[4], HIGH);
 	}
 }
 
@@ -58,10 +58,13 @@ void activateTrafficLight2(String lights, int pedestrians) {
 	}
 	if(pedestrians == 1) {
                 digitalWrite(trafficLights2[4], LOW);
-		blinkPed(trafficLights2[3]);
+		            digitalWrite(trafficLights2[3], HIGH);
+  } else if(pedestrians == 2){
+                digitalWrite(trafficLights2[3], LOW);
+                blinkPed(trafficLights2[4]);
 	} else {
                 digitalWrite(trafficLights2[4], HIGH);
-		digitalWrite(trafficLights2[3], LOW);
+		            digitalWrite(trafficLights2[3], LOW);
 	}
 }
 
@@ -71,8 +74,8 @@ void situation(int i) {
 			activateTrafficLight1("100",1); // 100 means red ON, yellow OFF, green OFF
 			activateTrafficLight2("001",0); // the second parameter is for pedestrians
 			break;						// 1 is ON and 0 is OFF
-                case 1:
-                        activateTrafficLight1("100",2); // 100 means red ON, yellow OFF, green OFF
+    case 1:
+      activateTrafficLight1("100",2); // 100 means red ON, yellow OFF, green OFF
 			activateTrafficLight2("001",0); // the second parameter is for pedestrians
 			break;						// 1 is ON and 0 is OFF
 		case 2:
@@ -83,8 +86,8 @@ void situation(int i) {
 			activateTrafficLight1("001",0);
 			activateTrafficLight2("100",1);
 			break;
-                case 4:
-                        activateTrafficLight1("001",0); // 100 means red ON, yellow OFF, green OFF
+    case 4:
+      activateTrafficLight1("001",0); // 100 means red ON, yellow OFF, green OFF
 			activateTrafficLight2("100",2); // the second parameter is for pedestrians
 			break;						// 1 is ON and 0 is OFF
 		case 5:
@@ -95,14 +98,14 @@ void situation(int i) {
 }
 
 void blinkPed(int ped) {
-	unsigned long currentMillis = millis();
-	if(currentMillis - previousPeds > interval) {
-		previousPeds = currentMillis;
+	unsigned long currentMillise = millis();
+	if(currentMillise - previousPeds > interval) {
+		previousPeds = currentMillise;
 		if (ledState == LOW) {
 		  ledState = HIGH;
 		} else {
 		  ledState = LOW;
-		  digitalWrite(ped, ledState);
-	        }
+	  }
+    digitalWrite(ped, ledState);
 	}
 }
