@@ -10,6 +10,8 @@ long interval = 300;	//blink interval for pedestrians
 int ledState = LOW;
 int state;
 int i = 0;
+int cars1 = 0;
+int cars2 = 0;
 
 void setup() {
   for(int i = 0; i < 5; i++) {
@@ -17,14 +19,18 @@ void setup() {
 	  pinMode(trafficLights2[i], OUTPUT);
   }
 
+  /*
   attachInterrupt(digitalPinToInterrupt(2), switchLights, RISING); // activate an external interrupt on the rising edge of pin 2
   attachInterrupt(digitalPinToInterrupt(3), switchLights, RISING); // activate an external interrupt on the rising edge of pin 3
+  */
+
+  pinMode(sensors1, INPUT);
+  pinMode(sensors2, INPUT);
   
-  ////pinMode(sensors1, INPUT);
-  ////pinMode(sensors2, INPUT);
 	Serial.begin(9600);
 }
 
+/*
 // to be activated asynchronously if either pin 2 or 3 pass from low to high
 void switchLights() {
   if(i >= situations) { //if we passed the maximum amount of scenes, then reset to 0
@@ -34,8 +40,26 @@ void switchLights() {
     i++; //increase the scene count
   }
 }
+*/
 
 void loop() {
+  if(analogRead(sensors1) > 500) {
+    cars1++;
+  }
+
+  if(analogRead(sensors2) > 500) {
+    cars2++;
+  }
+
+  if(cars1 > 5) {
+    something something previousCars
+    cars1 = 0;
+  }
+
+  if(cars2 > 5) {
+    something something previousCars
+    cars1 = 0;
+  }
         //main loop, every tick we increase our counter and test to see if we should enter the next phase
 	unsigned long currentMillis = millis();
 	if(currentMillis - previousCars < duration[i]) { //if the current time minus the last time we changed scene is less than the required duration to change scene, then just tick the scene in question
