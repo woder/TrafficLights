@@ -1,5 +1,6 @@
 package me.woder.trafficremote;
 
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.io.File;
@@ -10,14 +11,23 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 public class TrafficContentPane extends JPanel{
+	private static final long serialVersionUID = 1L;
 	Image image; //the background image
+	int imgheight = 694;
+	int imgwidth = 411;
 
-	public TrafficContentPane(JFrame window) {
+	public TrafficContentPane() {
 		try{
 			image = ImageIO.read(new File("background.jpg"));
+			System.out.println("Yeahhhhh");
 		}catch(IOException e){
 			e.printStackTrace();
 		}
+	}
+	
+	@Override
+	public Dimension getPreferredSize() {
+	      return new Dimension(imgheight, imgwidth);
 	}
 	
 	@Override
