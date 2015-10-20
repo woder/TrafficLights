@@ -1,5 +1,7 @@
-int trafficLights1[] = {2, 3, 4, 5, 6};	// red, yellow, green, pedestrians led pins
-int trafficLights2[] = {7, 8, 9, 10, 11};	// red, yellow, green, pedestrians led pins
+int trafficLights1[] = {4, 5, 6, 7, 8};	// red, yellow, green, pedestrians led pins
+int trafficLights2[] = {9, 10, 11, 12, 13};	// red, yellow, green, pedestrians led pins
+int sensors1 = 2; // pin for the main way sensors
+int sensors2 = 3; // pin for the cross way sensors
 int situations = 6; //these are scenes, each scene has a setting, so like red for road 1 but green for road 2 with pedestrian light on... and so on
 int duration[] = {4000, 4000, 3000, 9000, 4000, 3000}; // duration of each situation note that the format is currently as follows: Traffic green for one road; start flashing pedestrian sign; yellow, red
 long previousCars = 0;
@@ -14,7 +16,23 @@ void setup() {
 	  pinMode(trafficLights1[i], OUTPUT);
 	  pinMode(trafficLights2[i], OUTPUT);
   }
+
+  attachInterrupt(digitalPinToInterrupt(2), switchLights, RISING); // activate an external interrupt on the rising edge of pin 2
+  attachInterrupt(digitalPinToInterrupt(3), switchLights, RISING); // activate an external interrupt on the rising edge of pin 3
+  
+  ////pinMode(sensors1, INPUT);
+  ////pinMode(sensors2, INPUT);
 	Serial.begin(9600);
+}
+
+// to be activated asynchronously if either pin 2 or 3 pass from low to high
+void switchLights() {
+  if(i >= situations) { //if we passed the maximum amount of scenes, then reset to 0
+    i = 0;
+  } else {
+    situation(i); //trigger the right scene
+    i++; //increase the scene count
+  }
 }
 
 void loop() {
