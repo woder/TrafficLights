@@ -39,18 +39,22 @@ void addCars2() {
 }
 
 void loop() {
+  unsigned long currentMillis = millis();
   if(cars1 > 5) {
-    something something previousCars
+    i++;
+    situation(i);
+    previousCars = currentMillis; //reset the time to the current time, since we have just changed the scene
     cars1 = 0; // reset number of waiting cars for main road
   }
 
   if(cars2 > 5) {
-    something something previousCars
-    cars1 = 0; // reset number of waiting cars for through road
+    i++;
+    situation(i);
+    previousCars = currentMillis; //reset the time to the current time, since we have just changed the scene
+    cars2 = 0; // reset number of waiting cars for through road
   }
   
   // main loop, every tick we increase our counter and test to see if we should enter the next phase
-	unsigned long currentMillis = millis();
 	if(currentMillis - previousCars < duration[i]) { //if the current time minus the last time we changed scene is less than the required duration to change scene, then just tick the scene in question
 		situation(i); //tick the scene
 	} else {
