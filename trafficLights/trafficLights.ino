@@ -19,10 +19,8 @@ void setup() {
 	  pinMode(trafficLights2[i], OUTPUT);
   }
 
-  /*
-  attachInterrupt(digitalPinToInterrupt(2), switchLights, RISING); // activate an external interrupt on the rising edge of pin 2
-  attachInterrupt(digitalPinToInterrupt(3), switchLights, RISING); // activate an external interrupt on the rising edge of pin 3
-  */
+  attachInterrupt(digitalPinToInterrupt(2), addCars1, RISING); // activate an external interrupt on the rising edge of pin 2
+  attachInterrupt(digitalPinToInterrupt(3), addCars2, RISING); // activate an external interrupt on the rising edge of pin 3
 
   pinMode(sensors1, INPUT);
   pinMode(sensors2, INPUT);
@@ -30,37 +28,28 @@ void setup() {
 	Serial.begin(9600);
 }
 
-/*
-// to be activated asynchronously if either pin 2 or 3 pass from low to high
-void switchLights() {
-  if(i >= situations) { //if we passed the maximum amount of scenes, then reset to 0
-    i = 0;
-  } else {
-    situation(i); //trigger the right scene
-    i++; //increase the scene count
-  }
+// to be activated asynchronously if pin 2 passes from low to high
+void addCars1() {
+  cars1++; // increase waiting car count for main road
 }
-*/
+
+// to be activated asynchronously if pin 3 passes from low to high
+void addCars2() {
+  cars2++; // increase waiting car count for through road
+}
 
 void loop() {
-  if(analogRead(sensors1) > 500) {
-    cars1++;
-  }
-
-  if(analogRead(sensors2) > 500) {
-    cars2++;
-  }
-
   if(cars1 > 5) {
     something something previousCars
-    cars1 = 0;
+    cars1 = 0; // reset number of waiting cars for main road
   }
 
   if(cars2 > 5) {
     something something previousCars
-    cars1 = 0;
+    cars1 = 0; // reset number of waiting cars for through road
   }
-        //main loop, every tick we increase our counter and test to see if we should enter the next phase
+  
+  // main loop, every tick we increase our counter and test to see if we should enter the next phase
 	unsigned long currentMillis = millis();
 	if(currentMillis - previousCars < duration[i]) { //if the current time minus the last time we changed scene is less than the required duration to change scene, then just tick the scene in question
 		situation(i); //tick the scene
