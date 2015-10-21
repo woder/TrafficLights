@@ -40,6 +40,8 @@ void addCars2() {
 
 void loop() {
   unsigned long currentMillis = millis();
+
+  // if there are more than 5 cars waiting on the main road, change scenes
   if(cars1 > 5) {
     i++;
     situation(i);
@@ -47,6 +49,7 @@ void loop() {
     cars1 = 0; // reset number of waiting cars for main road
   }
 
+  // if there are more than 5 cars waiting on the through road, change scenes
   if(cars2 > 5) {
     i++;
     situation(i);
