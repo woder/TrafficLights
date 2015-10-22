@@ -76,17 +76,23 @@ void activateTrafficLight1(String lights, int pedestrians) {
 	for(int x = 0; x < 3; x++) {
 		if(lights[x] == '0') state = LOW;
 		if(lights[x] == '1') state = HIGH;
-		digitalWrite(trafficLights1[x], state);
+		// digitalWrite(trafficLights1[x], state);
+    Serial.write(state);
 	}
 	if(pedestrians == 1) {
-                digitalWrite(trafficLights1[4], LOW);
-		            digitalWrite(trafficLights1[3], HIGH);
-  } else if(pedestrians == 2){
-                digitalWrite(trafficLights1[3], LOW);
+                // digitalWrite(trafficLights1[4], LOW);
+		            // digitalWrite(trafficLights1[3], HIGH);
+               Serial.write(HIGH);
+               Serial.write(LOW);
+  } else if(pedestrians == 2) {
+                // digitalWrite(trafficLights1[3], LOW);
+                Serial.write(LOW);
                 blinkPed(trafficLights1[4]);
 	} else {
-		            digitalWrite(trafficLights1[3], LOW);
-                digitalWrite(trafficLights1[4], HIGH);
+		            // digitalWrite(trafficLights1[3], LOW);
+                // digitalWrite(trafficLights1[4], HIGH);
+                Serial.write(LOW);
+                Serial.write(HIGH);
 	}
 }
 
@@ -94,17 +100,23 @@ void activateTrafficLight2(String lights, int pedestrians) {
 	for(int x = 0; x < 3; x++) {
 		if(lights[x] == '0') state = LOW;
 		if(lights[x] == '1') state = HIGH;
-		digitalWrite(trafficLights2[x], state);
+		// digitalWrite(trafficLights2[x], state);
+    Serial.write(state);
 	}
 	if(pedestrians == 1) {
-                digitalWrite(trafficLights2[4], LOW);
-		            digitalWrite(trafficLights2[3], HIGH);
+                // digitalWrite(trafficLights2[4], LOW);
+		            // digitalWrite(trafficLights2[3], HIGH);
+                Serial.write(HIGH);
+                Serial.write(LOW);
   } else if(pedestrians == 2){
-                digitalWrite(trafficLights2[3], LOW);
+                // digitalWrite(trafficLights2[3], LOW);
+                Serial.write(LOW);
                 blinkPed(trafficLights2[4]);
 	} else {
-                digitalWrite(trafficLights2[4], HIGH);
-		            digitalWrite(trafficLights2[3], LOW);
+                // digitalWrite(trafficLights2[4], HIGH);
+		            // digitalWrite(trafficLights2[3], LOW);
+                Serial.write(LOW);
+                Serial.write(HIGH);
 	}
 }
 
@@ -146,6 +158,7 @@ void blinkPed(int ped) {
 		} else {
 		  ledState = LOW;
 	  }
-    digitalWrite(ped, ledState);
+    // digitalWrite(ped, ledState);
+    Serial.write(ledState);
 	}
 }
