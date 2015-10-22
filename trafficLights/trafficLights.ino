@@ -89,7 +89,7 @@ void activateTrafficLight1(String lights, int pedestrians) {
   } else if(pedestrians == 2) {
     // digitalWrite(trafficLights1[3], LOW);
     lights1.concat(LOW);
-    blinkPed(trafficLights1[4]);
+    blinkPed1(trafficLights1[4]);
   } else {
     // digitalWrite(trafficLights1[3], LOW);
     // digitalWrite(trafficLights1[4], HIGH);
@@ -115,7 +115,8 @@ void activateTrafficLight2(String lights, int pedestrians) {
   } else if(pedestrians == 2){
     // digitalWrite(trafficLights2[3], LOW);
     lights2.concat(LOW);
-    blinkPed(trafficLights2[4]);
+    lights2.concat(LOW);
+    blinkPed2(trafficLights2[4]);
   } else {
     // digitalWrite(trafficLights2[4], HIGH);
     // digitalWrite(trafficLights2[3], LOW);
@@ -155,16 +156,32 @@ void situation(int i) {
 	}
 }
 
-void blinkPed(int ped) {
+void blinkPed1(int ped) {
   unsigned long currentMillise = millis();
   if(currentMillise - previousPeds > interval) {
     previousPeds = currentMillise;
-    if (ledState == LOW) {
+    if(lights1.charAt(5) == '0') {
       ledState = HIGH;
     } else {
       ledState = LOW;
     }
     // digitalWrite(ped, ledState);
-    Serial.write(ledState);
+    lights1.charAt(5) == ledState;
+    Serial.write(lights1);
 	}
+}
+
+void blinkPed2(int ped) {
+  unsigned long currentMillise = millis();
+  if(currentMillise - previousPeds > interval) {
+    previousPeds = currentMillise;
+    if(lights2.charAt(5) == '0') {
+      ledState = HIGH;
+    } else {
+      ledState = LOW;
+    }
+    // digitalWrite(ped, ledState);
+    lights2.charAt(5) == ledState;
+    Serial.write(lights2);
+  }
 }
