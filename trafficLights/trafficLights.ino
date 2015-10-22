@@ -17,8 +17,8 @@ String lights2 = ""; // string to send over serial for the lights for the throug
 
 void setup() {
   for(int i = 0; i < 5; i++) {
-	  pinMode(trafficLights1[i], OUTPUT);
-	  pinMode(trafficLights2[i], OUTPUT);
+    pinMode(trafficLights1[i], OUTPUT);
+    pinMode(trafficLights2[i], OUTPUT);
   }
 
   attachInterrupt(digitalPinToInterrupt(2), addCars1, RISING); // activate an external interrupt on the rising edge of pin 2 MIGHT HAVE TO CHANGE TO FALLING
@@ -27,7 +27,7 @@ void setup() {
   pinMode(sensors1, INPUT);
   pinMode(sensors2, INPUT);
   
-	Serial.begin(9600);
+  Serial.begin(9600);
 }
 
 // to be activated asynchronously if pin 2 passes from low to high
@@ -62,108 +62,108 @@ void loop() {
   }
   
   // main loop, every tick we increase our counter and test to see if we should enter the next phase
-	if(currentMillis - previousCars < duration[i]) { //if the current time minus the last time we changed scene is less than the required duration to change scene, then just tick the scene in question
-		situation(i); //tick the scene
-	} else {
-		previousCars = currentMillis; //reset the time to the current time, since we have just changed the scene
-		if(i >= situations) { //if we passed the maximum amount of scenes, then reset to 0
-			i = 0;
-		} else {
-			i++; //increase the scene count
-		}
-	}
+  if(currentMillis - previousCars < duration[i]) { //if the current time minus the last time we changed scene is less than the required duration to change scene, then just tick the scene in question
+    situation(i); //tick the scene
+  } else {
+    previousCars = currentMillis; //reset the time to the current time, since we have just changed the scene
+    if(i >= situations) { //if we passed the maximum amount of scenes, then reset to 0
+      i = 0;
+    } else {
+      i++; //increase the scene count
+    }
+  }
 }
 
 void activateTrafficLight1(String lights, int pedestrians) {
-	for(int x = 0; x < 3; x++) {
-		if(lights[x] == '0') state = LOW;
-		if(lights[x] == '1') state = HIGH;
-		// digitalWrite(trafficLights1[x], state);
+  for(int x = 0; x < 3; x++) {
+    if(lights[x] == '0') state = LOW;
+    if(lights[x] == '1') state = HIGH;
+    // digitalWrite(trafficLights1[x], state);
     lights1.concat(state);
-	}
-	if(pedestrians == 1) {
-                // digitalWrite(trafficLights1[4], LOW);
-		            // digitalWrite(trafficLights1[3], HIGH);
-               lights1.concat(HIGH);
-               lights1.concat(LOW);
+  }
+  if(pedestrians == 1) {
+    // digitalWrite(trafficLights1[4], LOW);
+    // digitalWrite(trafficLights1[3], HIGH);
+    lights1.concat(HIGH);
+    lights1.concat(LOW);
   } else if(pedestrians == 2) {
-                // digitalWrite(trafficLights1[3], LOW);
-                lights1.concat(LOW);
-                blinkPed(trafficLights1[4]);
-	} else {
-		            // digitalWrite(trafficLights1[3], LOW);
-                // digitalWrite(trafficLights1[4], HIGH);
-                lights1.concat(LOW);
-                lights1.concat(HIGH);
-	}
+    // digitalWrite(trafficLights1[3], LOW);
+    lights1.concat(LOW);
+    blinkPed(trafficLights1[4]);
+  } else {
+    // digitalWrite(trafficLights1[3], LOW);
+    // digitalWrite(trafficLights1[4], HIGH);
+    lights1.concat(LOW);
+    lights1.concat(HIGH);
+  }
   Serial.write(lights1);
   lights1 = "";
 }
 
 void activateTrafficLight2(String lights, int pedestrians) {
-	for(int x = 0; x < 3; x++) {
-		if(lights[x] == '0') state = LOW;
-		if(lights[x] == '1') state = HIGH;
-		// digitalWrite(trafficLights2[x], state);
+  for(int x = 0; x < 3; x++) {
+    if(lights[x] == '0') state = LOW;
+    if(lights[x] == '1') state = HIGH;
+    // digitalWrite(trafficLights2[x], state);
     lights2.concat(state);
-	}
-	if(pedestrians == 1) {
-                // digitalWrite(trafficLights2[4], LOW);
-		            // digitalWrite(trafficLights2[3], HIGH);
-                lights2.concat(HIGH);
-                lights2.concat(LOW);
+  }
+  if(pedestrians == 1) {
+    // digitalWrite(trafficLights2[4], LOW);
+    // digitalWrite(trafficLights2[3], HIGH);
+    lights2.concat(HIGH);
+    lights2.concat(LOW);
   } else if(pedestrians == 2){
-                // digitalWrite(trafficLights2[3], LOW);
-                lights2.concat(LOW);
-                blinkPed(trafficLights2[4]);
-	} else {
-                // digitalWrite(trafficLights2[4], HIGH);
-		            // digitalWrite(trafficLights2[3], LOW);
-                lights2.concat(LOW);
-                lights2.concat(HIGH);
-	}
+    // digitalWrite(trafficLights2[3], LOW);
+    lights2.concat(LOW);
+    blinkPed(trafficLights2[4]);
+  } else {
+    // digitalWrite(trafficLights2[4], HIGH);
+    // digitalWrite(trafficLights2[3], LOW);
+    lights2.concat(LOW);
+    lights2.concat(HIGH);
+  }
   Serial.write(lights2);
   lights2 = "";
 }
 
 void situation(int i) {
-	switch(i) {
-		case 0:
-			activateTrafficLight1("100",1); // 100 means red ON, yellow OFF, green OFF
-			activateTrafficLight2("001",0); // the second parameter is for pedestrians
-			break;						// 1 is ON and 0 is OFF
+  switch(i) {
+    case 0:
+      activateTrafficLight1("100",1); // 100 means red ON, yellow OFF, green OFF
+      activateTrafficLight2("001",0); // the second parameter is for pedestrians
+      break;						// 1 is ON and 0 is OFF
     case 1:
       activateTrafficLight1("100",2); // 100 means red ON, yellow OFF, green OFF
-			activateTrafficLight2("001",0); // the second parameter is for pedestrians
-			break;						// 1 is ON and 0 is OFF
-		case 2:
-			activateTrafficLight1("100",0); // 110: red ON, yellow ON, green OFF
-			activateTrafficLight2("010",0);
-			break;
-		case 3:
-			activateTrafficLight1("001",0);
-			activateTrafficLight2("100",1);
-			break;
+      activateTrafficLight2("001",0); // the second parameter is for pedestrians
+      break;						// 1 is ON and 0 is OFF
+    case 2:
+      activateTrafficLight1("100",0); // 110: red ON, yellow ON, green OFF
+      activateTrafficLight2("010",0);
+      break;
+    case 3:
+      activateTrafficLight1("001",0);
+      activateTrafficLight2("100",1);
+      break;
     case 4:
       activateTrafficLight1("001",0); // 100 means red ON, yellow OFF, green OFF
-			activateTrafficLight2("100",2); // the second parameter is for pedestrians
-			break;						// 1 is ON and 0 is OFF
-		case 5:
-			activateTrafficLight1("010",0);
-			activateTrafficLight2("100",0);
-			break;
+      activateTrafficLight2("100",2); // the second parameter is for pedestrians
+      break;						// 1 is ON and 0 is OFF
+    case 5:
+      activateTrafficLight1("010",0);
+      activateTrafficLight2("100",0);
+      break;
 	}
 }
 
 void blinkPed(int ped) {
-	unsigned long currentMillise = millis();
-	if(currentMillise - previousPeds > interval) {
-		previousPeds = currentMillise;
-		if (ledState == LOW) {
-		  ledState = HIGH;
-		} else {
-		  ledState = LOW;
-	  }
+  unsigned long currentMillise = millis();
+  if(currentMillise - previousPeds > interval) {
+    previousPeds = currentMillise;
+    if (ledState == LOW) {
+      ledState = HIGH;
+    } else {
+      ledState = LOW;
+    }
     // digitalWrite(ped, ledState);
     Serial.write(ledState);
 	}
