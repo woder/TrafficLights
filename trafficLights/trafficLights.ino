@@ -44,6 +44,7 @@ void loop() {
   // if there are more than 5 cars waiting on the main road, change scenes
   if(cars1 > 5) {
     i++;
+    delay(5000);
     situation(i);
     previousCars = currentMillis; //reset the time to the current time, since we have just changed the scene
     cars1 = 0; // reset number of waiting cars for main road
@@ -52,6 +53,7 @@ void loop() {
   // if there are more than 5 cars waiting on the through road, change scenes
   if(cars2 > 5) {
     i++;
+    delay(5000);
     situation(i);
     previousCars = currentMillis; //reset the time to the current time, since we have just changed the scene
     cars2 = 0; // reset number of waiting cars for through road
