@@ -12,6 +12,8 @@ int state;
 int i = 0;
 int cars1 = 0;
 int cars2 = 0;
+String lights1 = ""; // string to send over serial for the lights for the main road
+String lights2 = ""; // string to send over serial for the lights for the through road
 
 void setup() {
   for(int i = 0; i < 5; i++) {
@@ -77,23 +79,25 @@ void activateTrafficLight1(String lights, int pedestrians) {
 		if(lights[x] == '0') state = LOW;
 		if(lights[x] == '1') state = HIGH;
 		// digitalWrite(trafficLights1[x], state);
-    Serial.write(state);
+    lights1.concat(state);
 	}
 	if(pedestrians == 1) {
                 // digitalWrite(trafficLights1[4], LOW);
 		            // digitalWrite(trafficLights1[3], HIGH);
-               Serial.write(HIGH);
-               Serial.write(LOW);
+               lights1.concat(HIGH);
+               lights1.concat(LOW);
   } else if(pedestrians == 2) {
                 // digitalWrite(trafficLights1[3], LOW);
-                Serial.write(LOW);
+                lights1.concat(LOW);
                 blinkPed(trafficLights1[4]);
 	} else {
 		            // digitalWrite(trafficLights1[3], LOW);
                 // digitalWrite(trafficLights1[4], HIGH);
-                Serial.write(LOW);
-                Serial.write(HIGH);
+                lights1.concat(LOW);
+                lights1.concat(HIGH);
 	}
+  Serial.write(lights1);
+  lights1 = "";
 }
 
 void activateTrafficLight2(String lights, int pedestrians) {
@@ -101,23 +105,25 @@ void activateTrafficLight2(String lights, int pedestrians) {
 		if(lights[x] == '0') state = LOW;
 		if(lights[x] == '1') state = HIGH;
 		// digitalWrite(trafficLights2[x], state);
-    Serial.write(state);
+    lights2.concat(state);
 	}
 	if(pedestrians == 1) {
                 // digitalWrite(trafficLights2[4], LOW);
 		            // digitalWrite(trafficLights2[3], HIGH);
-                Serial.write(HIGH);
-                Serial.write(LOW);
+                lights2.concat(HIGH);
+                lights2.concat(LOW);
   } else if(pedestrians == 2){
                 // digitalWrite(trafficLights2[3], LOW);
-                Serial.write(LOW);
+                lights2.concat(LOW);
                 blinkPed(trafficLights2[4]);
 	} else {
                 // digitalWrite(trafficLights2[4], HIGH);
 		            // digitalWrite(trafficLights2[3], LOW);
-                Serial.write(LOW);
-                Serial.write(HIGH);
+                lights2.concat(LOW);
+                lights2.concat(HIGH);
 	}
+  Serial.write(lights2);
+  lights2 = "";
 }
 
 void situation(int i) {
