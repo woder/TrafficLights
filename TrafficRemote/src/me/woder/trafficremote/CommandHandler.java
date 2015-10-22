@@ -18,6 +18,10 @@ public class CommandHandler {
 	        public void runCommand(TrafficRemote traffic, String command, String[] args) { 
 	               if(args.length > 5){
 	                   //in this case we would send the arduino the code for changing the lights
+	            	   String snd = args[1]+args[2]+args[3]+args[4]+args[5]+args[5];
+	            	   traffic.aserial.sendByte((byte)0x1);
+	            	   traffic.aserial.sendInt(snd.length());
+	            	   traffic.aserial.sendData(snd);
 	            	   traffic.tgui.insertText("Set traffic lights to: " , "black");
 	            	   traffic.tgui.insertText("green: " + args[1], "green");
 	            	   traffic.tgui.insertText(" yellow: " + args[2], "gold");
