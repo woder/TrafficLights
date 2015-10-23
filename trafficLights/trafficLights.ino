@@ -12,8 +12,7 @@ int sensors2 = 3; // pin for the cross way sensors
 //int i = 0;
 int cars1 = 0;
 int cars2 = 0;
-String lights1 = ""; // string to send over serial for the lights for the main road
-String lights2 = ""; // string to send over serial for the lights for the through road
+String lights = ""; // string to send over serial for the lights for the main road
 
 int led = 11; // LED connected to digital pin 13
 int recv = 0; // byte received on the serial port
@@ -220,19 +219,20 @@ void loop() {
   
   // if there are more than 5 cars waiting on the main road, change scenes
   if(cars1 > 5) {
-    lights1 = "10010";
+    lights = "10000110";
     Serial.write(1);
-    Serial.write(lights1);
+    Serial.write(lights);
     cars1 = 0; // reset number of waiting cars for main road
   }
 
   // if there are more than 5 cars waiting on the through road, change scenes
   if(cars2 > 5) {
-    lights2 = "10010";
+    lights = "00110001";
     Serial.write(1);
-    Serial.write(lights2);
+    Serial.write(lights);
     cars2 = 0; // reset number of waiting cars for through road
   }
 }
 
+//TURN ON/OFF LIGHTS LOCALLY AND SEND DATA
 //DOES HE WANT ME TO SEND SENSOR DATA OR WHICH LIGHTS ARE ON/OFF???
