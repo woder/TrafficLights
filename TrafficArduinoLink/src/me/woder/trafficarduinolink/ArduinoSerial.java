@@ -1,4 +1,4 @@
-package me.woder.trafficremote;
+package me.woder.trafficarduinolink;
 
 import gnu.io.CommPortIdentifier;
 import gnu.io.SerialPort;
@@ -15,6 +15,7 @@ import java.util.Enumeration;
  */
 public class ArduinoSerial implements SerialPortEventListener {
     SerialPort serialPort = null;
+    TrafficArduinoLink link;
 
     private static final String PORT_NAMES[] = { 
         //"/dev/tty.usbmodem", // Mac OS X
@@ -141,7 +142,7 @@ public class ArduinoSerial implements SerialPortEventListener {
     // Handle serial port event
     //
     public synchronized void serialEvent(SerialPortEvent oEvent) {
-        //System.out.println("Event received: " + oEvent.toString());
+        System.out.println("Event received: " + oEvent.toString());
         try {
             switch (oEvent.getEventType() ) {
                 case SerialPortEvent.DATA_AVAILABLE: 
@@ -150,8 +151,13 @@ public class ArduinoSerial implements SerialPortEventListener {
                             new InputStreamReader(
                                     serialPort.getInputStream()));
                     }
-                    String inputLine = input.readLine();
-                    System.out.println(inputLine);
+                    int id = input.read();
+                    if(id == 1){
+                     String inputLine = input.readLine(); //00000000 green yellow red green yellow red p1 p2
+                     int sensor = input.read();
+                     link.nethandle.sendSensor(inputLine, sensor);
+                     System.out.println(inputLine + " " + sensor);
+                    }
                     break;
 
                 default:
@@ -163,9 +169,11 @@ public class ArduinoSerial implements SerialPortEventListener {
         }
     }
 
-	public ArduinoSerial(TrafficRemote trafficRemote) {
+	public ArduinoSerial(TrafficArduinoLink link) {
+		this.link = link;
 		appName = getClass().getName();
 	}
+
 }
 
 

@@ -1,0 +1,23 @@
+package me.woder.trafficarduinolink;
+
+public class TrafficArduinoLink {
+	ArduinoSerial aserial;
+	NetworkHandler nethandle;
+	
+	public static void main(String[] args){
+		new TrafficArduinoLink();
+	}
+	
+	public TrafficArduinoLink(){
+		aserial = new ArduinoSerial(this);
+		nethandle = new NetworkHandler(this);
+		startLink();
+	}
+	
+	public void startLink(){
+		while(true){
+			nethandle.tick();
+		}
+	}
+
+}
