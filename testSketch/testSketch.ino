@@ -23,10 +23,10 @@ void loop()
       Serial.print("Rev: ");
       Serial.print(test);
       digitalWrite(led, HIGH);
-      digitalWrite(pts,LOW);
+      digitalWrite(pts, LOW);
     } else {
       digitalWrite(led, LOW);
-      digitalWrite(pts,HIGH);
+      digitalWrite(pts, HIGH);
     }
      
     // confirm values received in serial monitor window
