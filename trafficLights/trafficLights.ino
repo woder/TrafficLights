@@ -204,9 +204,13 @@ void loop() {
       test = Serial.readStringUntil('\n');
       Serial.print("Rev: ");
       Serial.print(test);
-      digitalWrite(led, HIGH);
+      for(int i = 0; i < 5; i++) {
+        digitalWrite(trafficLights1[i], HIGH);
+      }
     } else {
-      digitalWrite(led, LOW);
+      for(int i = 0; i < 5; i++) {
+        digitalWrite(trafficLights1[i], LOW);
+      }
     }
      
     // confirm values received in serial monitor window
