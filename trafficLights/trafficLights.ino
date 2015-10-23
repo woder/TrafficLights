@@ -2,18 +2,21 @@ int trafficLights1[] = {4, 5, 6, 7, 8};	// red, yel0, green, pedestrians led pin
 int trafficLights2[] = {9, 10, 11, 12, 13};	// red, yel0, green, pedestrians led pins
 int sensors1 = 2; // pin for the main way sensors
 int sensors2 = 3; // pin for the cross way sensors
-int situations = 6; //these are scenes, each scene has a setting, so like red for road 1 but green for road 2 with pedestrian light on... and so on
-int duration[] = {4000, 4000, 3000, 9000, 4000, 3000}; // duration of each situation note that the format is currently as fol0s: Traffic green for one road; start flashing pedestrian sign; yel0, red
-long previousCars = 0;
-long previousPeds = 0;
-long interval = 300;	//blink interval for pedestrians
-int ledState = 0;
-int state;
-int i = 0;
+//int situations = 6; //these are scenes, each scene has a setting, so like red for road 1 but green for road 2 with pedestrian light on... and so on
+//int duration[] = {4000, 4000, 3000, 9000, 4000, 3000}; // duration of each situation note that the format is currently as fol0s: Traffic green for one road; start flashing pedestrian sign; yel0, red
+//long previousCars = 0;
+//long previousPeds = 0;
+//long interval = 300;	//blink interval for pedestrians
+//int ledState = 0;
+//int state;
+//int i = 0;
 int cars1 = 0;
 int cars2 = 0;
 String lights1 = ""; // string to send over serial for the lights for the main road
 String lights2 = ""; // string to send over serial for the lights for the through road
+
+int led = 11; // LED connected to digital pin 13
+int recv = 0; // byte received on the serial port
 
 void setup() {
   for(int i = 0; i < 5; i++) {
@@ -21,11 +24,11 @@ void setup() {
     pinMode(trafficLights2[i], OUTPUT);
   }
 
-  attachInterrupt(digitalPinToInterrupt(2), addCars1, RISING); // activate an external interrupt on the rising edge of pin 2 MIGHT HAVE TO CHANGE TO FALLING
-  attachInterrupt(digitalPinToInterrupt(3), addCars2, RISING); // activate an external interrupt on the rising edge of pin 3 MIGHT HAVE TO CHANGE TO FALLING
-
   pinMode(sensors1, INPUT);
   pinMode(sensors2, INPUT);
+
+  attachInterrupt(digitalPinToInterrupt(2), addCars1, RISING); // activate an external interrupt on the rising edge of pin 2 MIGHT HAVE TO CHANGE TO FALLING
+  attachInterrupt(digitalPinToInterrupt(3), addCars2, RISING); // activate an external interrupt on the rising edge of pin 3 MIGHT HAVE TO CHANGE TO FALLING
   
   Serial.begin(9600);
 }
@@ -40,6 +43,7 @@ void addCars2() {
   cars2++; // increase waiting car count for through road
 }
 
+/*
 void loop() {
   unsigned long currentMillis = millis();
 
@@ -183,5 +187,42 @@ void blinkPed2(int ped) {
     // digitalWrite(ped, ledState);
     lights2.charAt(5) == ledState;
     Serial.write(lights2);
+  }
+}
+*/
+
+// JUST RECEIVE LIGHT CONFIG AND SEND SENSOR DATA AND SEND TO JAVA. DO NOT DO ANYTHING MYSELF
+void loop() {
+  // if serial port is available, read incoming bytes
+  if (Serial.available() > 0) {
+    recv = Serial.read();
+ 
+    // if 'y' (decimal 121) is received, turn LED/Powertail on
+    // anything other than 121 is received, turn LED/Powertail off
+    if (recv == 1){
+      String test = "";
+      test = Serial.readStringUntil('\n');
+      Serial.print("Rev: ");
+      Serial.print(test);
+      digitalWrite(led, HIGH);
+    } else {
+      digitalWrite(led, LOW);
+    }
+     
+    // confirm values received in serial monitor window
+    Serial.print("--Arduino received: ");
+    Serial.println(recv);
+  }
+  
+  // if there are more than 5 cars waiting on the main road, change scenes
+  if(cars1 > 5) {
+    SEND SIGNAL TO JAVA
+    cars1 = 0; // reset number of waiting cars for main road
+  }
+
+  // if there are more than 5 cars waiting on the through road, change scenes
+  if(cars2 > 5) {
+    SEND SIGNAL TO JAVA
+    cars2 = 0; // reset number of waiting cars for through road
   }
 }
