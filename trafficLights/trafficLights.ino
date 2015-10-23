@@ -220,13 +220,19 @@ void loop() {
   
   // if there are more than 5 cars waiting on the main road, change scenes
   if(cars1 > 5) {
-    SEND SIGNAL TO JAVA
+    lights1 = "10010";
+    Serial.write(1);
+    Serial.write(lights1);
     cars1 = 0; // reset number of waiting cars for main road
   }
 
   // if there are more than 5 cars waiting on the through road, change scenes
   if(cars2 > 5) {
-    SEND SIGNAL TO JAVA
+    lights2 = "10010";
+    Serial.write(1);
+    Serial.write(lights2);
     cars2 = 0; // reset number of waiting cars for through road
   }
 }
+
+//DOES HE WANT ME TO SEND SENSOR DATA OR WHICH LIGHTS ARE ON/OFF???
