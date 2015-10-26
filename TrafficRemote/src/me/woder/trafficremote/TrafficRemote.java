@@ -7,7 +7,6 @@ public class TrafficRemote {
 	public TNetwork tnet;
 	public CommandHandler chandle;
 	public NetworkHandler nethandle;
-	public ArduinoSerial aserial;
 	boolean networkReady = true;
 	
 	public static void main(String[] args){
