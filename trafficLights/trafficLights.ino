@@ -12,7 +12,7 @@ int state;
 int i = 0;
 int cars1 = 0;
 int cars2 = 0;
-String lights = ""; // string to send over serial for the lights for the main road
+char lights[9]; // string to send over serial for the lights for the main road
 int led = 11; // LED connected to digital pin 13
 int recv = 0; // byte received on the serial port
 
@@ -111,17 +111,17 @@ void activateTrafficLight1(String seq, int pedestrians) {
   for(int j = 0; i < 3; i++) {
     if(seq[j] == '0') state = 1;
     if(seq[j] == '1') state = 0;
-    lights.charAt(i) = state;
+    lights[i] = state;
   }
   if(pedestrians == 1) {
-    lights.charAt(6) = 1;
-    lights.charAt(7) = 0;
+    lights[6] = 1;
+    lights[7] = 0;
   } else if(pedestrians == 2) {
-    lights.charAt(6) = 0;
+    lights[6] = 0;
     blinkPed1(trafficLights1[4]);
   } else {
-    lights.charAt(6) = 0;
-    lights.charAt(7) = 1;
+    lights[6] = 0;
+    lights[7] = 1;
   }
   Serial.write(lights);
 }
@@ -130,62 +130,63 @@ void activateTrafficLight2(String seq, int pedestrians) {
   for(int j = 0; i < 3; i++) {
     if(seq[j] == '0') state = 1;
     if(seq[j] == '1') state = 0;
-    lights.charAt(i + 3) = state;
+    lights[i + 3] = state;
   }
   if(pedestrians == 1) {
-    lights.charAt(7) = 1;
-    lights.charAt(6) = 0;
+    lights[7] = 1;
+    lights[6] = 0;
   } else if(pedestrians == 2){
-    lights.charAt(7) = 0;
+    lights[7] = 0;
     blinkPed2(trafficLights2[4]);
   } else {
-    lights.charAt(7) = 0;
-    lights.charAt(6) = 1;
+    lights[7] = 0;
+    lights[6] = 1;
   }
   Serial.write(lights);
 }
 
+// SITUATIONS A BIT SKETCHY: GOTTA FIGURE OUT PED LIGHTS
 void situation(int i) {
   switch(i) {
     case 0:
       activateTrafficLight1("100",1); // 100 means red ON, yel0 OFF, green OFF
       activateTrafficLight2("001",0); // the second parameter is for pedestrians
-      lights = "00110010"; // ryg1, ryg2, ped1, ped2
+      lights[] = "00110010"; // ryg1, ryg2, ped1, ped2
       Serial.write(1);
       Serial.write(lights);
       break;            // 1 is ON and 0 is OFF
     case 1:
       activateTrafficLight1("100",2); // 100 means red ON, yel0 OFF, green OFF
       activateTrafficLight2("001",0); // the second parameter is for pedestrians
-      lights = "00110011"; // ryg1, ryg2, ped1, ped2
+      lights[] = "00110011"; // ryg1, ryg2, ped1, ped2
       Serial.write(1);
       Serial.write(lights);
       break;            // 1 is ON and 0 is OFF
     case 2:
       activateTrafficLight1("100",0); // 110: red ON, yel0 ON, green OFF
       activateTrafficLight2("010",0);
-      lights = "00101000"; // ryg1, ryg2, ped1, ped2
+      lights[] = "00101000"; // ryg1, ryg2, ped1, ped2
       Serial.write(1);
       Serial.write(lights);
       break;
     case 3:
       activateTrafficLight1("001",0);
       activateTrafficLight2("100",1);
-      lights = "10000101"; // ryg1, ryg2, ped1, ped2
+      lights[] = "10000101"; // ryg1, ryg2, ped1, ped2
       Serial.write(1);
       Serial.write(lights);
       break;
     case 4:
       activateTrafficLight1("001",0); // 100 means red ON, yel0 OFF, green OFF
       activateTrafficLight2("100",2); // the second parameter is for pedestrians
-      lights = "10000111"; // ryg1, ryg2, ped1, ped2
+      lights[] = "10000111"; // ryg1, ryg2, ped1, ped2
       Serial.write(1);
       Serial.write(lights);
       break;            // 1 is ON and 0 is OFF
     case 5:
       activateTrafficLight1("010",0);
       activateTrafficLight2("100",0);
-      lights = "01000100"; // ryg1, ryg2, ped1, ped2
+      lights[] = "01000100"; // ryg1, ryg2, ped1, ped2
       Serial.write(1);
       Serial.write(lights);
       break;
@@ -196,12 +197,12 @@ void blinkPed1(int ped) {
   unsigned long currentMillise = millis();
   if(currentMillise - previousPeds > interval) {
     previousPeds = currentMillise;
-    if(lights.charAt(5) == '0') {
+    if(lights[5] == '0') {
       ledState = 1;
     } else {
       ledState = 0;
     }
-    lights.charAt(5) = ledState;
+    lights[5] = ledState;
     Serial.write(1);
     Serial.write(lights);
   }
@@ -211,16 +212,16 @@ void blinkPed2(int ped) {
   unsigned long currentMillise = millis();
   if(currentMillise - previousPeds > interval) {
     previousPeds = currentMillise;
-    if(lights.charAt(5) == '0') {
+    if(lights[5] == '0') {
       ledState = 1;
     } else {
       ledState = 0;
     }
-    lights.charAt(5) = ledState;
+    lights[5] = ledState;
     Serial.write(1);
     Serial.write(lights);
   }
 }
 
 //TURN ON/OFF LIGHTS LOCALLY AND SEND DATA
-//DOES HE WANT ME TO SEND SENSOR DATA OR WHICH LIGHTS ARE ON/OFF???
+//ADD SEND OF SENSOR DATA
