@@ -47,7 +47,8 @@ void addCars2() {
 
 void loop() {
   unsigned long currentMillis = millis();
-  
+
+  //// FIX THIS
   // if serial port is available, read incoming bytes
   if (Serial.available() > 0) {
     recv = Serial.read();
@@ -59,6 +60,7 @@ void loop() {
       test = Serial.readStringUntil('\n');
       Serial.print("Rev: ");
       Serial.print(test);
+      test.toCharArray(lights, 9);
       for(int i = 0; i < 5; i++) {
         digitalWrite(trafficLights1[i], HIGH);
       }
