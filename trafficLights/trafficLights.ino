@@ -109,8 +109,8 @@ void loop() {
 
 void activateTrafficLight1(String seq, int pedestrians) {
   for(int j = 0; i < 3; i++) {
-    if(seq[j] == '0') state = 0;
-    if(seq[j] == '1') state = 1;
+    if(seq[j] == '0') state = 1;
+    if(seq[j] == '1') state = 0;
     lights.charAt(i) = state;
   }
   if(pedestrians == 1) {
@@ -128,8 +128,8 @@ void activateTrafficLight1(String seq, int pedestrians) {
 
 void activateTrafficLight2(String seq, int pedestrians) {
   for(int j = 0; i < 3; i++) {
-    if(seq[j] == '0') state = 0;
-    if(seq[j] == '1') state = 1;
+    if(seq[j] == '0') state = 1;
+    if(seq[j] == '1') state = 0;
     lights.charAt(i + 3) = state;
   }
   if(pedestrians == 1) {
@@ -150,32 +150,44 @@ void situation(int i) {
     case 0:
       activateTrafficLight1("100",1); // 100 means red ON, yel0 OFF, green OFF
       activateTrafficLight2("001",0); // the second parameter is for pedestrians
+      lights = "00110010"; // ryg1, ryg2, ped1, ped2
+      Serial.write(1);
+      Serial.write(lights);
       break;            // 1 is ON and 0 is OFF
     case 1:
       activateTrafficLight1("100",2); // 100 means red ON, yel0 OFF, green OFF
       activateTrafficLight2("001",0); // the second parameter is for pedestrians
-      break;            // 1 is ON and 0 is OFF
-      lights = "10000110"; // ryg1, ryg2, ped1, ped2
+      lights = "00110011"; // ryg1, ryg2, ped1, ped2
       Serial.write(1);
       Serial.write(lights);
+      break;            // 1 is ON and 0 is OFF
     case 2:
       activateTrafficLight1("100",0); // 110: red ON, yel0 ON, green OFF
       activateTrafficLight2("010",0);
-      lights = "00110001"; // ryg1, ryg2, ped1, ped2
+      lights = "00101000"; // ryg1, ryg2, ped1, ped2
       Serial.write(1);
       Serial.write(lights);
       break;
     case 3:
       activateTrafficLight1("001",0);
       activateTrafficLight2("100",1);
+      lights = "10000101"; // ryg1, ryg2, ped1, ped2
+      Serial.write(1);
+      Serial.write(lights);
       break;
     case 4:
       activateTrafficLight1("001",0); // 100 means red ON, yel0 OFF, green OFF
       activateTrafficLight2("100",2); // the second parameter is for pedestrians
+      lights = "10000111"; // ryg1, ryg2, ped1, ped2
+      Serial.write(1);
+      Serial.write(lights);
       break;            // 1 is ON and 0 is OFF
     case 5:
       activateTrafficLight1("010",0);
       activateTrafficLight2("100",0);
+      lights = "01000100"; // ryg1, ryg2, ped1, ped2
+      Serial.write(1);
+      Serial.write(lights);
       break;
   }
 }
