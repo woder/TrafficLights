@@ -33,11 +33,15 @@ void setup() {
 
 // to be activated asynchronously if pin 2 passes from 0 to 1
 void addCars1() {
+  Serial.write(2);
+  Serial.write("HI on mainway!");
   cars1++; // increase waiting car count for main road
 }
 
 // to be activated asynchronously if pin 3 passes from 0 to 1
 void addCars2() {
+  Serial.write(2);
+  Serial.write("HI on throughway!");
   cars2++; // increase waiting car count for through road
 }
 
