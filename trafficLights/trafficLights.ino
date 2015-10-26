@@ -41,7 +41,6 @@ void addCars2() {
   cars2++; // increase waiting car count for through road
 }
 
-// JUST RECEIVE LIGHT CONFIG AND SEND SENSOR DATA AND SEND TO JAVA. DO NOT DO ANYTHING MYSELF
 void loop() {
   unsigned long currentMillis = millis();
   
@@ -83,19 +82,27 @@ void loop() {
   
   // if there are more than 5 cars waiting on the main road, change scenes
   if(cars1 > 5) {
-    i++;
-    delay(5000);
-    situation(i);
+    if(i >= situations) { //if we passed the maximum amount of scenes, then reset to 0
+      i = 0;
+    } else {
+      i++; //increase the scene count
+    }
+    delay(500);
     previousCars = currentMillis; //reset the time to the current time, since we have just changed the scene
+    situation(i);
     cars1 = 0; // reset number of waiting cars for main road
   }
 
   // if there are more than 5 cars waiting on the through road, change scenes
   if(cars2 > 5) {
-    i++;
-    delay(5000);
-    situation(i);
+    if(i >= situations) { //if we passed the maximum amount of scenes, then reset to 0
+      i = 0;
+    } else {
+      i++; //increase the scene count
+    }
+    delay(500);
     previousCars = currentMillis; //reset the time to the current time, since we have just changed the scene
+    situation(i);
     cars2 = 0; // reset number of waiting cars for through road
   }
 }
@@ -104,17 +111,17 @@ void activateTrafficLight1(String seq, int pedestrians) {
   for(int j = 0; i < 3; i++) {
     if(seq[j] == '0') state = 0;
     if(seq[j] == '1') state = 1;
-    lights.concat(state);
+    lights.charAt(i) = state;
   }
   if(pedestrians == 1) {
-    lights.concat(1);
-    lights.concat(0);
+    lights.charAt(6) = 1;
+    lights.charAt(7) = 0;
   } else if(pedestrians == 2) {
-    lights.concat(0);
+    lights.charAt(6) = 0;
     blinkPed1(trafficLights1[4]);
   } else {
-    lights.concat(0);
-    lights.concat(1);
+    lights.charAt(6) = 0;
+    lights.charAt(7) = 1;
   }
   Serial.write(lights);
 }
@@ -123,18 +130,17 @@ void activateTrafficLight2(String seq, int pedestrians) {
   for(int j = 0; i < 3; i++) {
     if(seq[j] == '0') state = 0;
     if(seq[j] == '1') state = 1;
-    lights.concat(state);
+    lights.charAt(i + 3) = state;
   }
   if(pedestrians == 1) {
-    lights.concat(1);
-    lights.concat(0);
+    lights.charAt(7) = 1;
+    lights.charAt(6) = 0;
   } else if(pedestrians == 2){
-    lights.concat(0);
-    lights.concat(0);
+    lights.charAt(7) = 0;
     blinkPed2(trafficLights2[4]);
   } else {
-    lights.concat(0);
-    lights.concat(1);
+    lights.charAt(7) = 0;
+    lights.charAt(6) = 1;
   }
   Serial.write(lights);
 }
@@ -146,18 +152,18 @@ void situation(int i) {
       activateTrafficLight2("001",0); // the second parameter is for pedestrians
       break;            // 1 is ON and 0 is OFF
     case 1:
-      lights = "10000110"; // ryg1, ryg2, ped1, ped2
-      Serial.write(1);
-      Serial.write(lights);
       activateTrafficLight1("100",2); // 100 means red ON, yel0 OFF, green OFF
       activateTrafficLight2("001",0); // the second parameter is for pedestrians
       break;            // 1 is ON and 0 is OFF
+      lights = "10000110"; // ryg1, ryg2, ped1, ped2
+      Serial.write(1);
+      Serial.write(lights);
     case 2:
+      activateTrafficLight1("100",0); // 110: red ON, yel0 ON, green OFF
+      activateTrafficLight2("010",0);
       lights = "00110001"; // ryg1, ryg2, ped1, ped2
       Serial.write(1);
       Serial.write(lights);
-      activateTrafficLight1("100",0); // 110: red ON, yel0 ON, green OFF
-      activateTrafficLight2("010",0);
       break;
     case 3:
       activateTrafficLight1("001",0);
