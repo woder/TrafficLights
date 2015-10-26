@@ -22,20 +22,16 @@ public class TrafficServer{
 	Thread ircs;
 	Thread commands;
 	
-	public void start(){
+	public static void main(String[] args){
+	    new TrafficServer();
+	}
+	
+	public TrafficServer(){
         System.out.println("TrafficServer started!");
 		running = true;	
 		servers = new ConnectionManager(this, 25455);
 		server = new Thread(servers,"T1");
 		server.start();
-	}
-	
-	public void sendOut(String message, boolean ircsent){
-		 servers.sendToAll(message);
-	}
-	
-	public void sendNormal(String message){
-		servers.sendNormal(message);
 	}
 	
 	public String readString(DataInputStream in, int length){

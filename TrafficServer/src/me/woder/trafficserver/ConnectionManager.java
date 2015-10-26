@@ -22,7 +22,7 @@ public class ConnectionManager implements Runnable {
 	public void start(){
         ServerSocket welcomeSocket;
 		try {
-			welcomeSocket = new ServerSocket(25455);
+			welcomeSocket = new ServerSocket(port);
          while(global.running){
            Socket client = welcomeSocket.accept();
            Thread t = new Thread(new ClientCon(client, global, this));
@@ -32,21 +32,8 @@ public class ConnectionManager implements Runnable {
 		e.printStackTrace();
 	 }
 	}
-	
-	public void sendToAll(String message) {
-		for (ClientCon player : global.players) {
-			player.sendMsg(message);
-		}
-	}
-	
-	public void sendNormal(String message){
-		for (ClientCon player : global.players) {
-			player.sendNormal(message);
-		}
-	}
 
-	@Override
-	public void run() {
+	public void run(){
 		start();		
 	}
 

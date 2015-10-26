@@ -1,5 +1,6 @@
 package me.woder.trafficremote;
 
+import java.io.IOException;
 import java.util.HashMap;
 
 interface Command {
@@ -19,9 +20,11 @@ public class CommandHandler {
 	               if(args.length > 5){
 	                   //in this case we would send the arduino the code for changing the lights
 	            	   String snd = args[1]+args[2]+args[3]+args[4]+args[5]+args[5]+"\n";
-	            	   traffic.aserial.sendByte((byte)0x1);
-	            	   //traffic.aserial.sendInt(snd.length());
-	            	   traffic.aserial.sendData(snd);
+	            	   try {
+                        traffic.nethandle.sendSet(snd);
+                       } catch (IOException e) {
+                        e.printStackTrace();
+                       }
 	            	   traffic.tgui.insertText("Set traffic lights to: " , "black");
 	            	   traffic.tgui.insertText("green: " + args[1], "green");
 	            	   traffic.tgui.insertText(" yellow: " + args[2], "gold");
@@ -38,7 +41,11 @@ public class CommandHandler {
             @Override
          public void runCommand(TrafficRemote traffic, String command, String[] args) { 
                     //in this case we would send the arduino the code for changing the lights
-                    traffic.aserial.sendByte((byte)0x2);
+                   try {
+                    traffic.nethandle.sendReset();
+                   } catch (IOException e) {
+                    e.printStackTrace();
+                   }
                     traffic.tgui.insertText("Reset lights" , "black");
             };
         });

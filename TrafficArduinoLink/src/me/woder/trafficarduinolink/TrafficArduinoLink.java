@@ -11,6 +11,7 @@ public class TrafficArduinoLink {
 	public TrafficArduinoLink(){
 		aserial = new ArduinoSerial(this);
 		nethandle = new NetworkHandler(this);
+		aserial.initialize();
 		startLink();
 	}
 	

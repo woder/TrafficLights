@@ -6,8 +6,9 @@ public class TrafficRemote {
 	public TrafficGui tgui;
 	public TNetwork tnet;
 	public CommandHandler chandle;
+	public NetworkHandler nethandle;
 	public ArduinoSerial aserial;
-	boolean networkReady = false;
+	boolean networkReady = true;
 	
 	public static void main(String[] args){
 		new TrafficRemote();
@@ -17,8 +18,9 @@ public class TrafficRemote {
 		tgui = new TrafficGui(this);
 		tnet = new TNetwork(this);
 		chandle = new CommandHandler(this);
-		aserial = new ArduinoSerial(this);
-		networkReady = aserial.initialize();
+		//aserial = new ArduinoSerial(this);
+		nethandle = new NetworkHandler(this);
+		//networkReady = aserial.initialize();
 		if(networkReady){
 		   startClient();
 		}else{
