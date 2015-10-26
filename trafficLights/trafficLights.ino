@@ -61,9 +61,12 @@ void loop() {
       Serial.print("Rev: ");
       Serial.print(test);
       test.toCharArray(lights, 9);
+      /*
       for(int i = 0; i < 5; i++) {
         digitalWrite(trafficLights1[i], HIGH);
       }
+      */
+      //REPLACE THIS
     } else {
       for(int i = 0; i < 5; i++) {
         digitalWrite(trafficLights1[i], LOW);
