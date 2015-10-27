@@ -235,6 +235,13 @@ void blinkPed2(int ped) {
 //ADD SEND OF SENSOR DATA
 */
 
+int trafficLights1[] = {4, 5, 6, 7, 8};  // red, yel0, green, pedestrians led pins
+int trafficLights2[] = {9, 10, 11, 12, 13}; // red, yel0, green, pedestrians led pins
+int sensors1 = 2; // pin for the main way sensors
+int sensors2 = 3; // pin for the cross way sensors
+char lights[9]; // string to send over serial for the lights for the main road
+int recv = 0; // byte received on the serial port
+
 void setup() {
   for(int i = 0; i < 5; i++) {
     pinMode(trafficLights1[i], OUTPUT);
