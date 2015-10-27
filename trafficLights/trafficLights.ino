@@ -273,7 +273,6 @@ void loop() {
     delay(2500);
   }
   
-  //// FIX THIS
   // if serial port is available, read incoming bytes
   if (Serial.available() > 0) {
     recv = Serial.read();
@@ -286,13 +285,58 @@ void loop() {
       Serial.print("Rev: ");
       Serial.print(test);
       test.toCharArray(lights, 9);
-      //for(int i = 0; i < 5; i++) {
-      //  digitalWrite(trafficLights1[i], HIGH);
-      //}
-      //REPLACE THIS
+      for(int i = 0; i < 5; i++) {
+        digitalWrite(trafficLights1[i], LOW);
+        digitalWrite(trafficLights2[i], LOW);
+      }
+      for(int i = 0; i < 8; i++) {
+        if(i < 3) {
+          digitalWrite(trafficLights1[i], lights[i].toInt);
+        }
+        if(i >= 3 && i < 6) {
+          digitalWrite(trafficLights2[i - 3], lights[i].toInt);
+        }
+        if(i == 6) {
+          if(lights[i].toInt == 0) {
+            digitalWrite(trafficLights1[3], LOW);
+            digitalWrite(trafficLights1[4], HIGH);
+          }
+          if(lights[i].toInt == 1) {
+            digitalWrite(trafficLights1[3], HIGH);
+            digitalWrite(trafficLights1[4], LOW);
+          } else {
+            digitalWrite(trafficLights1[3], LOW);
+            for(int j = 0; j < 10; j++) {
+              digitalWrite(trafficLights1[4], HIGH);
+              delay(1000);
+              digitalWrite(trafficLights1[4], LOW);
+              delay(1000);
+            }
+          }
+        }
+        if(i == 7) {
+          if(lights[i].toInt == 0) {
+            digitalWrite(trafficLights2[3], LOW);
+            digitalWrite(trafficLights2[4], HIGH);
+          }
+          if(lights[i].toInt == 1) {
+            digitalWrite(trafficLights2[3], HIGH);
+            digitalWrite(trafficLights2[4], LOW);
+          } else {
+            digitalWrite(trafficLights2[3], LOW);
+            for(int j = 0; j < 10; j++) {
+              digitalWrite(trafficLights2[4], HIGH);
+              delay(1000);
+              digitalWrite(trafficLights2[4], LOW);
+              delay(1000);
+            }
+          }
+        }
+      }
     } else {
       for(int i = 0; i < 5; i++) {
         digitalWrite(trafficLights1[i], LOW);
+        digitalWrite(trafficLights2[i], LOW);
       }
     }
 
