@@ -37,8 +37,8 @@ void loop() {
       digitalWrite(trafficLights2[i], LOW);
     }
     delay(2500);
-    digitalWrite(trafficLights1[0], HIGH);
-    digitalWrite(trafficLights2[0], HIGH);
+    digitalWrite(trafficLights1[2], HIGH);
+    digitalWrite(trafficLights2[2], HIGH);
     delay(2500);
   }
   
