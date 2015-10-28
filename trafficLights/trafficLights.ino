@@ -1,5 +1,5 @@
-int trafficLights1[] = {4, 5, 6, 7, 8};  // red, yel0, green, pedestrians led pins
-int trafficLights2[] = {9, 10, 11, 12, 13}; // red, yel0, green, pedestrians led pins
+int trafficLights1[] = {4, 5, 6, 7, 8};  // green, yellow, red, blue + orange pedestrians led pins
+int trafficLights2[] = {9, 10, 11, 12, 13}; // green, yellow, red, blue + orange pedestrians led pins
 int sensors1 = 2; // pin for the main way sensors
 int sensors2 = 3; // pin for the cross way sensors
 int recv = 0; // byte received on the serial port
@@ -60,18 +60,22 @@ void loop() {
       for(int i = 0; i < 8; i++) {
         if(i < 3) {
           digitalWrite(trafficLights1[i], (int)lights.charAt(i));
+          Serial.println("OUAIS 1");
         }
         if(i >= 3 && i < 6) {
           digitalWrite(trafficLights2[i - 3], (int)lights.charAt(i));
+          Serial.println("OUAIS 2");
         }
         if(i == 6) {
           if(lights.charAt(i) == '0') {
             digitalWrite(trafficLights1[3], LOW);
             digitalWrite(trafficLights1[4], HIGH);
+            Serial.println("OUAIS 3");
           }
           if(lights.charAt(i) == '1') {
             digitalWrite(trafficLights1[3], HIGH);
             digitalWrite(trafficLights1[4], LOW);
+            Serial.println("OUAIS 4");
           } else {
             digitalWrite(trafficLights1[3], LOW);
             for(int j = 0; j < 10; j++) {
@@ -80,16 +84,19 @@ void loop() {
               digitalWrite(trafficLights1[4], LOW);
               delay(1000);
             }
+            Serial.println("OUAIS 5");
           }
         }
         if(i == 7) {
           if(lights.charAt(i) == '0') {
             digitalWrite(trafficLights2[3], LOW);
             digitalWrite(trafficLights2[4], HIGH);
+            Serial.println("OUAIS 6");
           }
           if(lights.charAt(i) == '1') {
             digitalWrite(trafficLights2[3], HIGH);
             digitalWrite(trafficLights2[4], LOW);
+            Serial.println("OUAIS 7");
           } else {
             digitalWrite(trafficLights2[3], LOW);
             for(int j = 0; j < 10; j++) {
@@ -98,6 +105,7 @@ void loop() {
               digitalWrite(trafficLights2[4], LOW);
               delay(1000);
             }
+            Serial.println("OUAIS 8");
           }
         }
       }
@@ -105,6 +113,7 @@ void loop() {
       for(int i = 0; i < 5; i++) {
         digitalWrite(trafficLights1[i], LOW);
         digitalWrite(trafficLights2[i], LOW);
+        Serial.println("OUAIS 9");
       }
     }
 
