@@ -59,11 +59,11 @@ void loop() {
       }
       for(int i = 0; i < 8; i++) {
         if(i < 3) {
-          digitalWrite(trafficLights1[i], atoi(lights.charAt(i) - '0'));
+          digitalWrite(trafficLights1[i], lights.charAt(i) - '0');
           Serial.println("OUAIS 1");
         }
         if(i >= 3 && i < 6) {
-          digitalWrite(trafficLights2[i - 3], atoi(lights.charAt(i) - '0'));
+          digitalWrite(trafficLights2[i - 3], lights.charAt(i) - '0');
           Serial.println("OUAIS 2");
         }
         if(i == 6) {
