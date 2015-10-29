@@ -32,13 +32,13 @@ void addCars2() {
 void loop() {
   // while there is no serial connection, flash red lights to treat as 4-way stop
   while (!Serial) {
+    digitalWrite(trafficLights1[2], HIGH);
+    digitalWrite(trafficLights2[2], HIGH);
+    delay(2500);
     for(int i = 0; i < 5; i++) {
       digitalWrite(trafficLights1[i], LOW);
       digitalWrite(trafficLights2[i], LOW);
     }
-    delay(2500);
-    digitalWrite(trafficLights1[2], HIGH);
-    digitalWrite(trafficLights2[2], HIGH);
     delay(2500);
   }
   
