@@ -13,8 +13,9 @@ public class TrafficServer{
 	public String password;
 	public String serverpassword;
 	public boolean running = false;
-	public List<ClientCon> players = new LinkedList<ClientCon>();
+	public LinkedList<ClientCon> players = new LinkedList<ClientCon>();
 	public HashMap<String, Boolean> activated = new HashMap<String, Boolean>();
+	public TrafficManager tmanager; //our most important file, this actually handles whats going on at a street level
 	ConnectionManager servers;
 	ConnectionManager connection;
 	Thread server;
@@ -28,10 +29,14 @@ public class TrafficServer{
 	
 	public TrafficServer(){
         System.out.println("TrafficServer started!");
+        tmanager = new TrafficManager(this);
 		running = true;	
 		servers = new ConnectionManager(this, 25455);
 		server = new Thread(servers,"T1");
 		server.start();
+		while(true){
+			tmanager.tick();
+		}
 	}
 	
 	public String readString(DataInputStream in, int length){

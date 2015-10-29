@@ -4,6 +4,8 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.LinkedList;
+import java.util.List;
 
 public class ClientCon implements Runnable {
 @SuppressWarnings("unused")
@@ -13,7 +15,7 @@ private DataInputStream in;
 private DataOutputStream out;
 @SuppressWarnings("unused")
 private ConnectionManager connection;
-private byte clientType = 0x00;
+byte clientType = 0x00;
 
 public ClientCon(Socket client, TrafficServer global, ConnectionManager connection) {
     this.client = client;
@@ -49,14 +51,16 @@ public void run() { //TODO make this relevant to the network code of the client
                 if(id == 0x01){
                     String stats = in.readUTF();      
                     System.out.println("Set command received: " + stats);
-                    for(ClientCon p : global.players){ //loop over all the currently open connections looking for the clienttype of 1 (the arduino link module)
+                    List<ClientCon> players = (LinkedList<ClientCon>) global.players.clone();
+                    for(ClientCon p : players){ //loop over all the currently open connections looking for the clienttype of 1 (the arduino link module)
                         if(p.clientType == 1){
                             p.sendSet(stats);
                         }
                     }
                     out.writeByte(0x01); //send that everything is okay ! :D
                 }else if(id == 0x02){
-                    for(ClientCon p : global.players){ //loop over all the currently open connections looking for the clienttype of 1 (the arduino link module)
+                	List<ClientCon> players = (LinkedList<ClientCon>) global.players.clone();
+                    for(ClientCon p : players){ //loop over all the currently open connections looking for the clienttype of 1 (the arduino link module)
                         if(p.clientType == 1){
                             p.sendReset();
                         }
