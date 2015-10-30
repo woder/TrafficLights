@@ -22,11 +22,13 @@ void setup() {
 // to be activated asynchronously if pin 2 passes from 0 to 1
 void addCars1() {
   Serial.write(2); // send signal to server; a car passed on mainway
+  Serial.println("RISING 1 BABY!");
 }
 
 // to be activated asynchronously if pin 3 passes from 0 to 1
 void addCars2() {
   Serial.write(3); // send signal to server; a car passed on throughway
+  Serial.println("RISING 2 BABY!");
 }
 
 void loop() {
