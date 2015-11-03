@@ -1,16 +1,15 @@
 package me.woder.trafficserver;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 public class TrafficManager {
 	public int scenes = 5; //the amount of different "scenes we have" is basically just the different ways to light the lights
-	public int[] durations = {4000, 4000, 3000, 9000, 4000, 3000};
+	public int[] durations = {10000, 4000, 3000, 10000, 4000, 3000};
 	public long previousCars = 0;
 	public int currentScene = 0; //the scene number we are currently on
 	private TrafficServer tServer;
-	public int jacob = 0;
+	public long lastPacketTime = 0; //the time of the last packet
 
 	public TrafficManager(TrafficServer trafficServer) {
 		this.tServer = trafficServer;
@@ -56,17 +55,17 @@ public class TrafficManager {
 	      break;
 	   }
 	   
-	   if(jacob > 100000000){
-		System.out.println("Triggered");
+	   long currentTime = System.currentTimeMillis();
+	   
+	   if(currentTime - lastPacketTime > 1000){
+		System.out.println("The lights are: " + lights);
 	    List<ClientCon> players = (LinkedList<ClientCon>) tServer.players.clone();
 	    for(ClientCon p : players){ //loop over all the currently open connections looking for the clienttype of 1 (the arduino link module)
             if(p.clientType == 1){
                 p.sendSet(lights);
             }
         }
-	    jacob = 0;
-	   }else{
-		   jacob++;
+	    lastPacketTime = currentTime;
 	   }
 	}
 

@@ -15,7 +15,7 @@ private DataInputStream in;
 private DataOutputStream out;
 @SuppressWarnings("unused")
 private ConnectionManager connection;
-byte clientType = 0x00;
+public byte clientType = 0x00;
 
 public ClientCon(Socket client, TrafficServer global, ConnectionManager connection) {
     this.client = client;

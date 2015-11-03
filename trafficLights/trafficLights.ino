@@ -33,16 +33,26 @@ void setup() {
 
 // to be activated asynchronously if pin 2 passes from 0 to 1
 void addCars1() {
+<<<<<<< HEAD
   Serial.write(2);
   Serial.write("HI on mainway!");
   cars1++; // increase waiting car count for main road
+=======
+  Serial.write(2); // send signal to server; a car passed on mainway
+  Serial.println("RISING 1 BABY!");
+>>>>>>> 27c4895f38d94fbf9c1b9fcec902f210ba3898b4
 }
 
 // to be activated asynchronously if pin 3 passes from 0 to 1
 void addCars2() {
+<<<<<<< HEAD
   Serial.write(2);
   Serial.write("HI on throughway!");
   cars2++; // increase waiting car count for through road
+=======
+  Serial.write(3); // send signal to server; a car passed on throughway
+  Serial.println("RISING 2 BABY!");
+>>>>>>> 27c4895f38d94fbf9c1b9fcec902f210ba3898b4
 }
 
 void loop() {
@@ -77,7 +87,64 @@ void loop() {
       Serial.print(test);
       test.toCharArray(lights, 9);
       for(int i = 0; i < 5; i++) {
+<<<<<<< HEAD
         digitalWrite(trafficLights1[i], HIGH);
+=======
+        digitalWrite(trafficLights1[i], LOW);
+        digitalWrite(trafficLights2[i], LOW);
+      }
+      for(int i = 0; i < 8; i++) {
+        if(i < 3) {
+          digitalWrite(trafficLights1[i], int(lights.charAt(i) - '0'));
+          Serial.println("OUAIS 1");
+        }
+        if(i >= 3 && i < 6) {
+          digitalWrite(trafficLights2[i - 3], int(lights.charAt(i) - '0'));
+          Serial.println("OUAIS 2");
+        }
+        if(i == 6) {
+          if(lights.charAt(i) == '0') {
+            digitalWrite(trafficLights1[3], LOW);
+            digitalWrite(trafficLights1[4], HIGH);
+            Serial.println("OUAIS 3");
+          }
+          if(lights.charAt(i) == '1') {
+            digitalWrite(trafficLights1[3], HIGH);
+            digitalWrite(trafficLights1[4], LOW);
+            Serial.println("OUAIS 4");
+          } else {
+            digitalWrite(trafficLights1[3], LOW);
+            for(int j = 0; j < 10; j++) {
+              digitalWrite(trafficLights1[4], HIGH);
+              delay(1000);
+              digitalWrite(trafficLights1[4], LOW);
+              delay(1000);
+            }
+            Serial.println("OUAIS 5");
+          }
+        }
+        if(i == 7) {
+          if(lights.charAt(i) == '0') {
+            digitalWrite(trafficLights2[3], LOW);
+            digitalWrite(trafficLights2[4], HIGH);
+            Serial.println("OUAIS 6");
+          }
+          if(lights.charAt(i) == '1') {
+            digitalWrite(trafficLights2[3], HIGH);
+            digitalWrite(trafficLights2[4], LOW);
+            Serial.println("OUAIS 7");
+          } else {
+            digitalWrite(trafficLights2[3], LOW);
+            for(int j = 0; j < 10; j++) {
+              digitalWrite(trafficLights2[4], HIGH);
+              delay(1000);
+              digitalWrite(trafficLights2[4], LOW);
+              delay(1000);
+            }
+            Serial.println("OUAIS 8");
+          }
+        }
+>>>>>>> 27c4895f38d94fbf9c1b9fcec902f210ba3898b4
       }
     } else {
       for(int i = 0; i < 5; i++) {
