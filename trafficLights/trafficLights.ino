@@ -1,5 +1,6 @@
 int trafficLights1[] = {4, 5, 6, 7, 8};	// red, yel0, green, pedestrians led pins
 int trafficLights2[] = {9, 10, 11, 12, 13};	// red, yel0, green, pedestrians led pins
+int trafficLightPins[] = {4, 5, 6, 9, 10, 11, 7, 8, 12, 13}; //green, yellow, red; green yellow red; ped blue ped orange; ped blue ped orange
 int sensors1 = 2; // pin for the main way sensors
 int sensors2 = 3; // pin for the cross way sensors
 int situations = 6; //these are scenes, each scene has a setting, so like red for road 1 but green for road 2 with pedestrian light on... and so on
@@ -15,6 +16,10 @@ int cars2 = 0;
 char lights[9]; // string to send over serial for the lights for the main road
 int led = 11; // LED connected to digital pin 13
 int recv = 0; // byte received on the serial port
+boolean pedtoggle = false; //are we toggling the ped1
+boolean ped2toggle = false; //are we toggling the ped2
+int pedstate = 0;
+int ped2state = 0;
 
 void setup() {
   for(int i = 0; i < 5; i++) {
@@ -25,38 +30,25 @@ void setup() {
   pinMode(sensors1, INPUT);
   pinMode(sensors2, INPUT);
 
-  attachInterrupt(digitalPinToInterrupt(2), addCars1, RISING); // activate an external interrupt on the rising edge of pin 2 MIGHT HAVE TO CHANGE TO FALLING
-  attachInterrupt(digitalPinToInterrupt(3), addCars2, RISING); // activate an external interrupt on the rising edge of pin 3 MIGHT HAVE TO CHANGE TO FALLING
+  //attachInterrupt(digitalPinToInterrupt(2), addCars1, RISING); // activate an external interrupt on the rising edge of pin 2 MIGHT HAVE TO CHANGE TO FALLING
+  //attachInterrupt(digitalPinToInterrupt(3), addCars2, RISING); // activate an external interrupt on the rising edge of pin 3 MIGHT HAVE TO CHANGE TO FALLING
   
   Serial.begin(9600);
 }
 
 // to be activated asynchronously if pin 2 passes from 0 to 1
 void addCars1() {
-<<<<<<< HEAD
-  Serial.write(2);
-  Serial.write("HI on mainway!");
-  cars1++; // increase waiting car count for main road
-=======
   Serial.write(2); // send signal to server; a car passed on mainway
   Serial.println("RISING 1 BABY!");
->>>>>>> 27c4895f38d94fbf9c1b9fcec902f210ba3898b4
 }
 
 // to be activated asynchronously if pin 3 passes from 0 to 1
 void addCars2() {
-<<<<<<< HEAD
-  Serial.write(2);
-  Serial.write("HI on throughway!");
-  cars2++; // increase waiting car count for through road
-=======
   Serial.write(3); // send signal to server; a car passed on throughway
   Serial.println("RISING 2 BABY!");
->>>>>>> 27c4895f38d94fbf9c1b9fcec902f210ba3898b4
 }
 
 void loop() {
-<<<<<<< HEAD
   // while there is no serial connection, flash red lights to treat as 4-way stop
   while (!Serial) {
     digitalWrite(trafficLights1[2], HIGH);
@@ -69,27 +61,64 @@ void loop() {
     delay(2500);
   }
   
-=======
   unsigned long currentMillis = millis();
-
+  
+  blinkPed1(trafficLightPins[7]);
+  blinkPed2(trafficLightPins[9]);
+  
   //// FIX THIS
->>>>>>> origin/master
   // if serial port is available, read incoming bytes
   if (Serial.available() > 0) {
-    recv = Serial.read();
- 
+    recv = Serial.read() - 0;
+    Serial.print("Recv: ");
+    Serial.println(recv);
     // if 'y' (decimal 121) is received, turn LED/Powertail on
     // anything other than 121 is received, turn LED/Powertail off
     if (recv == 1){
       String test = "";
       test = Serial.readStringUntil('\n');
       Serial.print("Rev: ");
-      Serial.print(test);
-      test.toCharArray(lights, 9);
+      Serial.println(test);
+      
+      for(int i = 0; i < 8; i++){
+         char number = test[i];
+         
+         Serial.print("I: ");
+         Serial.println(number);
+         if(i == 6){
+           if(number == '0'){
+              pedtoggle = false;
+              digitalWrite(trafficLightPins[6], LOW);
+              digitalWrite(trafficLightPins[7], HIGH);
+           }else if(number == '1'){
+              digitalWrite(trafficLightPins[6], HIGH);
+              digitalWrite(trafficLightPins[7], LOW);
+           }else if(number == '2'){
+              digitalWrite(trafficLightPins[6], LOW);
+              pedtoggle = true;
+           }
+         }else if(i == 7){
+           if(number == '0'){
+              ped2toggle = false;
+              digitalWrite(trafficLightPins[8], LOW);
+              digitalWrite(trafficLightPins[9], HIGH);
+           }else if(number == '1'){
+              digitalWrite(trafficLightPins[8], HIGH);
+              digitalWrite(trafficLightPins[9], LOW);
+           }else if(number == '2'){
+              digitalWrite(trafficLightPins[8], LOW);
+              ped2toggle = true;
+           }
+         }else{
+           if(test[i] == '1'){
+              digitalWrite(trafficLightPins[i], HIGH);
+           }else{
+              digitalWrite(trafficLightPins[i], LOW);
+           }
+         }
+      }
+      /*test.toCharArray(lights, 9);
       for(int i = 0; i < 5; i++) {
-<<<<<<< HEAD
-        digitalWrite(trafficLights1[i], HIGH);
-=======
         digitalWrite(trafficLights1[i], LOW);
         digitalWrite(trafficLights2[i], LOW);
       }
@@ -144,20 +173,18 @@ void loop() {
             Serial.println("OUAIS 8");
           }
         }
->>>>>>> 27c4895f38d94fbf9c1b9fcec902f210ba3898b4
       }
     } else {
       for(int i = 0; i < 5; i++) {
         digitalWrite(trafficLights1[i], LOW);
       }
-    }
+    }*/
      
     // confirm values received in serial monitor window
-    Serial.print("--Arduino received: ");
-    Serial.println(recv);
   }
+ }
 
-  if(currentMillis - previousCars < duration[i]) { //if the current time minus the last time we changed scene is less than the required duration to change scene, then just tick the scene in question
+/*  if(currentMillis - previousCars < duration[i]) { //if the current time minus the last time we changed scene is less than the required duration to change scene, then just tick the scene in question
     situation(i); //tick the scene
   } else {
     previousCars = currentMillis; //reset the time to the current time, since we have just changed the scene
@@ -192,7 +219,7 @@ void loop() {
     previousCars = currentMillis; //reset the time to the current time, since we have just changed the scene
     situation(i);
     cars2 = 0; // reset number of waiting cars for through road
-  }
+  }*/
 }
 
 void activateTrafficLight1(String seq, int pedestrians) {
@@ -239,42 +266,42 @@ void situation(int i) {
     case 0:
       activateTrafficLight1("100",1); // 100 means red ON, yel0 OFF, green OFF
       activateTrafficLight2("001",0); // the second parameter is for pedestrians
-      lights[] = "00110010"; // ryg1, ryg2, ped1, ped2
+      //lights[] = "00110010"; // ryg1, ryg2, ped1, ped2
       Serial.write(1);
       Serial.write(lights);
       break;            // 1 is ON and 0 is OFF
     case 1:
       activateTrafficLight1("100",2); // 100 means red ON, yel0 OFF, green OFF
       activateTrafficLight2("001",0); // the second parameter is for pedestrians
-      lights[] = "00110011"; // ryg1, ryg2, ped1, ped2
+     // lights[] = "00110011"; // ryg1, ryg2, ped1, ped2
       Serial.write(1);
       Serial.write(lights);
       break;            // 1 is ON and 0 is OFF
     case 2:
       activateTrafficLight1("100",0); // 110: red ON, yel0 ON, green OFF
       activateTrafficLight2("010",0);
-      lights[] = "00101000"; // ryg1, ryg2, ped1, ped2
+    //  lights[] = "00101000"; // ryg1, ryg2, ped1, ped2
       Serial.write(1);
       Serial.write(lights);
       break;
     case 3:
       activateTrafficLight1("001",0);
       activateTrafficLight2("100",1);
-      lights[] = "10000101"; // ryg1, ryg2, ped1, ped2
+     // lights[] = "10000101"; // ryg1, ryg2, ped1, ped2
       Serial.write(1);
       Serial.write(lights);
       break;
     case 4:
       activateTrafficLight1("001",0); // 100 means red ON, yel0 OFF, green OFF
       activateTrafficLight2("100",2); // the second parameter is for pedestrians
-      lights[] = "10000111"; // ryg1, ryg2, ped1, ped2
+      //lights[] = "10000111"; // ryg1, ryg2, ped1, ped2
       Serial.write(1);
       Serial.write(lights);
       break;            // 1 is ON and 0 is OFF
     case 5:
       activateTrafficLight1("010",0);
       activateTrafficLight2("100",0);
-      lights[] = "01000100"; // ryg1, ryg2, ped1, ped2
+      //lights[] = "01000100"; // ryg1, ryg2, ped1, ped2
       Serial.write(1);
       Serial.write(lights);
       break;
@@ -282,34 +309,37 @@ void situation(int i) {
 }
 
 void blinkPed1(int ped) {
+ if(pedtoggle == true){
   unsigned long currentMillise = millis();
   if(currentMillise - previousPeds > interval) {
     previousPeds = currentMillise;
-    if(lights[5] == '0') {
+    if(pedstate == 0) {
       ledState = 1;
     } else {
       ledState = 0;
     }
-    lights[5] = ledState;
-    Serial.write(1);
-    Serial.write(lights);
+    pedstate = ledState;
+    digitalWrite(ped, ledState);
   }
+ }
 }
 
 void blinkPed2(int ped) {
+ if(ped2toggle == true){
   unsigned long currentMillise = millis();
   if(currentMillise - previousPeds > interval) {
     previousPeds = currentMillise;
-    if(lights[5] == '0') {
+    if(ped2state == 0) {
       ledState = 1;
     } else {
       ledState = 0;
     }
-    lights[5] = ledState;
-    Serial.write(1);
-    Serial.write(lights);
+    ped2state = ledState;
+    digitalWrite(ped, ledState);
   }
+ }
 }
+
 
 //TURN ON/OFF LIGHTS LOCALLY AND SEND DATA
 //ADD SEND OF SENSOR DATA

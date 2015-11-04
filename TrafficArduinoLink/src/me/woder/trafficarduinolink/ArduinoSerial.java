@@ -23,6 +23,7 @@ public class ArduinoSerial implements SerialPortEventListener {
 //        "/dev/tty", // Linux
 //        "/dev/serial", // Linux
         "COM4", // Windows
+        "COM3", //windows
     };
     
     private String appName;
@@ -142,7 +143,7 @@ public class ArduinoSerial implements SerialPortEventListener {
     // Handle serial port event
     //
     public synchronized void serialEvent(SerialPortEvent oEvent) {
-        System.out.println("Event received: " + oEvent.toString());
+        //System.out.println("Event received: " + oEvent.toString());
         try {
             switch (oEvent.getEventType() ) {
                 case SerialPortEvent.DATA_AVAILABLE: 
@@ -151,13 +152,15 @@ public class ArduinoSerial implements SerialPortEventListener {
                             new InputStreamReader(
                                     serialPort.getInputStream()));
                     }
-                    int id = input.read();
+                    String lol = input.readLine();
+                    System.out.println(lol);
+                    /*int id = input.read();
                     if(id == 1){
                      String inputLine = input.readLine(); //00000000 green yellow red green yellow red p1 p2
                      int sensor = input.read();
                      link.nethandle.sendSensor(inputLine, sensor);
                      System.out.println(inputLine + " " + sensor);
-                    }
+                    }*/
                     break;
 
                 default:
