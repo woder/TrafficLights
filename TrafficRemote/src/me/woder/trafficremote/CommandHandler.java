@@ -19,7 +19,7 @@ public class CommandHandler {
 	        public void runCommand(TrafficRemote traffic, String command, String[] args) { 
 	               if(args.length > 5){
 	                   //in this case we would send the arduino the code for changing the lights
-	            	   String snd = args[1]+args[2]+args[3]+args[4]+args[5]+args[5]+"\n";
+	            	   String snd = args[1]+args[2]+args[3]+args[4]+args[5]+args[5]+args[6]+args[7]+"\n";
 	            	   try {
                         traffic.nethandle.sendSet(snd);
                        } catch (IOException e) {
@@ -47,6 +47,32 @@ public class CommandHandler {
                     e.printStackTrace();
                    }
                     traffic.tgui.insertText("Reset lights" , "black");
+            };
+        });
+				
+		commands.put("pause", new Command() {
+            @Override
+         public void runCommand(TrafficRemote traffic, String command, String[] args) { 
+                    //in this case we would send the arduino the code for changing the lights
+                   try {
+                    traffic.nethandle.sendPause();
+                   } catch (IOException e) {
+                    e.printStackTrace();
+                   }
+                    traffic.tgui.insertText("Lights paused" , "black");
+            };
+        });
+		
+		commands.put("resume", new Command() {
+            @Override
+         public void runCommand(TrafficRemote traffic, String command, String[] args) { 
+                    //in this case we would send the arduino the code for changing the lights
+                   try {
+                    traffic.nethandle.sendResume();
+                   } catch (IOException e) {
+                    e.printStackTrace();
+                   }
+                    traffic.tgui.insertText("Lights resumed" , "black");
             };
         });
 	}

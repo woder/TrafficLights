@@ -13,6 +13,7 @@ public class TrafficServer{
 	public String password;
 	public String serverpassword;
 	public boolean running = false;
+	public boolean trunning = true;
 	public LinkedList<ClientCon> players = new LinkedList<ClientCon>();
 	public HashMap<String, Boolean> activated = new HashMap<String, Boolean>();
 	public TrafficManager tmanager; //our most important file, this actually handles whats going on at a street level
@@ -35,7 +36,7 @@ public class TrafficServer{
 		server = new Thread(servers,"T1");
 		server.start();
 		while(true){
-			tmanager.tick();
+		   tmanager.tick();
 		}
 	}
 	

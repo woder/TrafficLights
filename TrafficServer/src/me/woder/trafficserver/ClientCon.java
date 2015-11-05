@@ -47,6 +47,12 @@ public void run() { //TODO make this relevant to the network code of the client
            		String stats = in.readUTF();
            		int sensor = in.readInt();   	 
               }
+            }else if(id == 0x02){
+              global.trunning = false;
+              global.log.info("Tmanager stopped");
+            }else if(id == 0x03){
+              global.trunning = true;
+              global.log.info("Tmanager started");
             }else{
                 if(id == 0x01){
                     String stats = in.readUTF();      
@@ -71,11 +77,8 @@ public void run() { //TODO make this relevant to the network code of the client
         }
     } catch (IOException e) {
         System.err.println(e);
-        try {
-            out.writeByte(0x02); //send that uh oh, something happened
-        } catch (IOException e1) {
-            e1.printStackTrace();
-        }
+       //opps, lets cancel our relation with this client, since we lost them
+        global.players.remove(this);
     }
 }
 

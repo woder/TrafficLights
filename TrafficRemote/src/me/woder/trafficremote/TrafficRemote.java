@@ -7,7 +7,7 @@ public class TrafficRemote {
 	public TNetwork tnet;
 	public CommandHandler chandle;
 	public NetworkHandler nethandle;
-	boolean networkReady = true;
+	boolean networkReady = false;
 	
 	public static void main(String[] args){
 		new TrafficRemote();
@@ -20,22 +20,14 @@ public class TrafficRemote {
 		//aserial = new ArduinoSerial(this);
 		nethandle = new NetworkHandler(this);
 		//networkReady = aserial.initialize();
-		if(networkReady){
-		   startClient();
-		}else{
-			try {
-				throw new IOException("Something went wrong");
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
+		startClient();
 	}
 	
 	public void startClient(){
 		while(true){
 			//proccess some stuff here
 			tgui.tick();
-			tnet.tick();
+			nethandle.tick();
 		}
 	}
 	
