@@ -27,6 +27,7 @@ import java.util.HashMap;
 public class TrafficGui {
 	JPanel container;
 	TrafficRemote traffic;
+	TrafficContentPane trcf;
 	private JTextField textField;
 	private JTextPane textArea;
 	public DefaultStyledDocument doc = new DefaultStyledDocument();
@@ -41,7 +42,7 @@ public class TrafficGui {
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);   
         initilise(); //setup all the mess of variables
         
-        TrafficContentPane trcf = new TrafficContentPane();
+        trcf = new TrafficContentPane();
         JScrollPane scrollPane = new JScrollPane();
         textArea = new JTextPane(doc);
         DefaultCaret caret = (DefaultCaret)textArea.getCaret();

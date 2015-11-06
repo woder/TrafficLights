@@ -22,7 +22,7 @@ public class NetworkHandler {
 	
 	public void connect(){
 	    try {
-            sslSocket = new Socket("localhost", 25455);   //not an ssl socket, just pretend since my god ssl is a project of its own
+            sslSocket = new Socket("wltd.org", 25455);   //not an ssl socket, just pretend since my god ssl is a project of its own
             out = new DataOutputStream(sslSocket.getOutputStream());
             out.writeByte(0x02); //write out a byte to tell the server that we are a link module
             in = new DataInputStream(sslSocket.getInputStream());
@@ -80,6 +80,8 @@ public class NetworkHandler {
                 String data = in.readUTF();
                 System.out.println("Data was: " + data);
                 link.tgui.insertText("Lights set to: " + data, "blue");
+                //Il faut changer les lumiere à leur nouvelle état graphiquement
+                setLights(data);
             }else if(packetid == 2){ //sensor data
                 String data = in.readUTF();
                 int sensor = in.read();
@@ -102,6 +104,53 @@ public class NetworkHandler {
 			);
 		}
 	   }
+	}
+	
+	public void setLights(String status){
+	    link.tgui.trcf.greenon = false;
+        link.tgui.trcf.yellowon = false;
+        link.tgui.trcf.redon = false;
+        link.tgui.trcf.green2on = false;
+        link.tgui.trcf.yellow2on = false;
+        link.tgui.trcf.red2on = false;
+        link.tgui.trcf.ped1blue = false;
+        link.tgui.trcf.ped2blue = false;
+	    for(int i = 0; i < 8; i++){
+	        if(status.charAt(i) == '1'){
+	            switch(i){
+	              case 0:
+	                  link.tgui.trcf.greenon = true;
+	                  break;
+	              case 1:
+	                  link.tgui.trcf.yellowon = true;
+	                  break;
+	              case 2:
+	                  link.tgui.trcf.redon = true;
+	                  break;
+	              case 3:
+	                  link.tgui.trcf.green2on = true;
+	                  break;
+	              case 4:
+	                  link.tgui.trcf.yellow2on = true;
+	                  break;
+	              case 5:
+	                  link.tgui.trcf.red2on = true;
+	                  break;
+	              case 6:
+	                  link.tgui.trcf.ped1blue = true;
+	                  break;
+	              case 7:
+	                  link.tgui.trcf.ped2blue = true;
+	            }
+	        }else if(status.charAt(i) == '2'){
+	            if(i == 6){
+	                link.tgui.trcf.ped1orange = true;
+	            }else if(i == 7){
+	                link.tgui.trcf.ped2orange = true;
+	            }
+	        }
+	    }
+	    link.tgui.trcf.repaint();
 	}
 	
 	public void tick(){

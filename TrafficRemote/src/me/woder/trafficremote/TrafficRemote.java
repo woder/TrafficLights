@@ -4,7 +4,6 @@ import java.io.IOException;
 
 public class TrafficRemote {
 	public TrafficGui tgui;
-	public TNetwork tnet;
 	public CommandHandler chandle;
 	public NetworkHandler nethandle;
 	boolean networkReady = false;
@@ -15,7 +14,6 @@ public class TrafficRemote {
 	
 	public TrafficRemote(){
 		tgui = new TrafficGui(this);
-		tnet = new TNetwork(this);
 		chandle = new CommandHandler(this);
 		//aserial = new ArduinoSerial(this);
 		nethandle = new NetworkHandler(this);
