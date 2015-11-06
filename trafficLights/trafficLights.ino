@@ -1,6 +1,6 @@
 int trafficLightPins[] = {4, 5, 6, 9, 10, 11, 7, 8, 12, 13}; //green, yellow, red; green yellow red; ped blue ped orange; ped blue ped orange
-int sensors1 = 2; // pin for the main way sensors
-int sensors2 = 3; // pin for the cross way sensors
+int sensor1 = 2; // pin for the main way sensors
+int sensor2 = 3; // pin for the cross way sensors
 long previousPeds = 0;
 long interval = 300;	//blink interval for pedestrians
 int ledState = 0; // temp var for switching light state
@@ -10,6 +10,8 @@ boolean pedtoggle = false; //are we toggling the ped1
 boolean ped2toggle = false; //are we toggling the ped2
 int pedstate = 0;
 int ped2state = 0;
+int sensorData1 = 0;
+int sensorData2 = 0;
 
 void setup() {
   for(int i = 0; i < 10; i++) {
@@ -23,6 +25,7 @@ void setup() {
 }
 
 void loop() {
+  /*
   // while there is no serial connection, flash red lights to treat as 4-way stop
   while (!Serial) {
     unsigned long timeoutTimer = millis();
@@ -37,6 +40,7 @@ void loop() {
       delay(2500);
     }
   }
+  */
   
   blinkPed1(trafficLightPins[7]);
   blinkPed2(trafficLightPins[9]);
@@ -91,7 +95,34 @@ void loop() {
            }
          }
       }
+    }else{
+      unsigned long timeoutTimer = millis();
+  
+      if(timeoutTimer >= 5000) {
+        for(int i = 0; i < 10; i++) {
+          digitalWrite(trafficLightPins[i], LOW);
+        }
+        delay(2500);
+        digitalWrite(trafficLightPins[2], HIGH);
+        digitalWrite(trafficLightPins[5], HIGH);
+        delay(2500);
+      }
     }
+  }
+
+  sensorData1 = analogRead(sensor1);
+  sensorData1 = map(sensorData1, 0, 1023, 0, 255);
+  sensorData1 = constrain(sensorData1, 0, 255);
+  sensorData2 = analogRead(sensor2);
+  sensorData2 = map(sensorData2, 0, 1023, 0, 255);
+  sensorData2 = constrain(sensorData2, 0, 255);
+  if(sensorData1 > 127) {
+    Serial.write(2);
+    Serial.write(sensorData1);
+  }
+  if(sensorData2 > 127) {
+    Serial.write(3);
+    Serial.write(sensorData2);
   }
 }
 
