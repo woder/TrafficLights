@@ -25,16 +25,18 @@ void setup() {
 void loop() {
   // while there is no serial connection, flash red lights to treat as 4-way stop
   while (!Serial) {
-    for(int i = 0; i < 10; i++) {
-      digitalWrite(trafficLightPins[i], LOW);
+    unsigned long timeoutTimer = millis();
+
+    if(timeoutTimer >= 5000) {
+      for(int i = 0; i < 10; i++) {
+        digitalWrite(trafficLightPins[i], LOW);
+      }
+      delay(2500);
+      digitalWrite(trafficLightPins[2], HIGH);
+      digitalWrite(trafficLightPins[5], HIGH);
+      delay(2500);
     }
-    delay(2500);
-    digitalWrite(trafficLightPins[2], HIGH);
-    digitalWrite(trafficLightPins[5], HIGH);
-    delay(2500);
   }
-  
-  unsigned long currentMillis = millis();
   
   blinkPed1(trafficLightPins[7]);
   blinkPed2(trafficLightPins[9]);
