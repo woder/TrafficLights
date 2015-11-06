@@ -3,16 +3,12 @@ int trafficLights2[] = {9, 10, 11, 12, 13};	// red, yel0, green, pedestrians led
 int trafficLightPins[] = {4, 5, 6, 9, 10, 11, 7, 8, 12, 13}; //green, yellow, red; green yellow red; ped blue ped orange; ped blue ped orange
 int sensors1 = 2; // pin for the main way sensors
 int sensors2 = 3; // pin for the cross way sensors
-int situations = 6; //these are scenes, each scene has a setting, so like red for road 1 but green for road 2 with pedestrian light on... and so on
-int duration[] = {4000, 4000, 3000, 9000, 4000, 3000}; // duration of each situation note that the format is currently as fol0s: Traffic green for one road; start flashing pedestrian sign; yel0, red
 long previousCars = 0;
 long previousPeds = 0;
 long interval = 300;	//blink interval for pedestrians
 int ledState = 0; // temp var for switching light state
 int state;
 int i = 0;
-int cars1 = 0;
-int cars2 = 0;
 char lights[9]; // string to send over serial for the lights for the main road
 int led = 11; // LED connected to digital pin 13
 int recv = 0; // byte received on the serial port
