@@ -13,7 +13,7 @@ int ped2state = 0;
 
 void setup() {
   for(int i = 0; i < 10; i++) {
-    pinMode(trafficLightsPins[i], OUTPUT);
+    pinMode(trafficLightPins[i], OUTPUT);
   }
 
   pinMode(sensors1, INPUT);
@@ -26,11 +26,11 @@ void loop() {
   // while there is no serial connection, flash red lights to treat as 4-way stop
   while (!Serial) {
     for(int i = 0; i < 10; i++) {
-      digitalWrite(trafficLightsPins[i], LOW);
+      digitalWrite(trafficLightPins[i], LOW);
     }
     delay(2500);
-    digitalWrite(trafficLightsPins[2], HIGH);
-    digitalWrite(trafficLightsPins[5], HIGH);
+    digitalWrite(trafficLightPins[2], HIGH);
+    digitalWrite(trafficLightPins[5], HIGH);
     delay(2500);
   }
   
@@ -89,6 +89,8 @@ void loop() {
            }
          }
       }
+    }
+  }
 }
 
 void blinkPed1(int ped) {
