@@ -29,23 +29,8 @@ void setup() {
 
   pinMode(sensors1, INPUT);
   pinMode(sensors2, INPUT);
-
-  //attachInterrupt(digitalPinToInterrupt(2), addCars1, RISING); // activate an external interrupt on the rising edge of pin 2 MIGHT HAVE TO CHANGE TO FALLING
-  //attachInterrupt(digitalPinToInterrupt(3), addCars2, RISING); // activate an external interrupt on the rising edge of pin 3 MIGHT HAVE TO CHANGE TO FALLING
   
   Serial.begin(9600);
-}
-
-// to be activated asynchronously if pin 2 passes from 0 to 1
-void addCars1() {
-  Serial.write(2); // send signal to server; a car passed on mainway
-  Serial.println("RISING 1 BABY!");
-}
-
-// to be activated asynchronously if pin 3 passes from 0 to 1
-void addCars2() {
-  Serial.write(3); // send signal to server; a car passed on throughway
-  Serial.println("RISING 2 BABY!");
 }
 
 void loop() {
