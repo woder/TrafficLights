@@ -1,16 +1,10 @@
-int trafficLights1[] = {4, 5, 6, 7, 8};	// red, yel0, green, pedestrians led pins
-int trafficLights2[] = {9, 10, 11, 12, 13};	// red, yel0, green, pedestrians led pins
 int trafficLightPins[] = {4, 5, 6, 9, 10, 11, 7, 8, 12, 13}; //green, yellow, red; green yellow red; ped blue ped orange; ped blue ped orange
 int sensors1 = 2; // pin for the main way sensors
 int sensors2 = 3; // pin for the cross way sensors
-long previousCars = 0;
 long previousPeds = 0;
 long interval = 300;	//blink interval for pedestrians
 int ledState = 0; // temp var for switching light state
-int state;
 int i = 0;
-char lights[9]; // string to send over serial for the lights for the main road
-int led = 11; // LED connected to digital pin 13
 int recv = 0; // byte received on the serial port
 boolean pedtoggle = false; //are we toggling the ped1
 boolean ped2toggle = false; //are we toggling the ped2
@@ -18,9 +12,8 @@ int pedstate = 0;
 int ped2state = 0;
 
 void setup() {
-  for(int i = 0; i < 5; i++) {
-    pinMode(trafficLights1[i], OUTPUT);
-    pinMode(trafficLights2[i], OUTPUT);
+  for(int i = 0; i < 10; i++) {
+    pinMode(trafficLightsPins[i], OUTPUT);
   }
 
   pinMode(sensors1, INPUT);
@@ -32,13 +25,12 @@ void setup() {
 void loop() {
   // while there is no serial connection, flash red lights to treat as 4-way stop
   while (!Serial) {
-    digitalWrite(trafficLights1[2], HIGH);
-    digitalWrite(trafficLights2[2], HIGH);
-    delay(2500);
-    for(int i = 0; i < 5; i++) {
-      digitalWrite(trafficLights1[i], LOW);
-      digitalWrite(trafficLights2[i], LOW);
+    for(int i = 0; i < 10; i++) {
+      digitalWrite(trafficLightsPins[i], LOW);
     }
+    delay(2500);
+    digitalWrite(trafficLightsPins[2], HIGH);
+    digitalWrite(trafficLightsPins[5], HIGH);
     delay(2500);
   }
   
@@ -47,7 +39,6 @@ void loop() {
   blinkPed1(trafficLightPins[7]);
   blinkPed2(trafficLightPins[9]);
   
-  //// FIX THIS
   // if serial port is available, read incoming bytes
   if (Serial.available() > 0) {
     recv = Serial.read() - 0;
