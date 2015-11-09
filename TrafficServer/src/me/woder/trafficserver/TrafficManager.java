@@ -41,7 +41,7 @@ public class TrafficManager {
 	      lights = "10000110\n"; // gyr1, gyr2, ped1, ped2 ; green on, red on, pedestrians for the road thats red go
 	      break;            // 1 is ON and 0 is OFF
 	    case 1:
-	      lights = "10000120\n"; // gyr1, gyr2, ped1, ped2 ; yellow on, red on, pedestrians for the road thats red caution
+	      lights = "01000120\n"; // gyr1, gyr2, ped1, ped2 ; yellow on, red on, pedestrians for the road thats red caution
 	      break;            // 1 is ON and 0 is OFF
 	    case 2:
 	      lights = "00100100\n"; // gyr1, gyr2, ped1, ped2 ; red on, red on, pedestrians for the road thats red stop
