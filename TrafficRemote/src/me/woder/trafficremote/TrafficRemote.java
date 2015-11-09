@@ -7,6 +7,7 @@ public class TrafficRemote {
 	public CommandHandler chandle;
 	public NetworkHandler nethandle;
 	boolean networkReady = false;
+	Thread nethandlee;
 	
 	public static void main(String[] args){
 		new TrafficRemote();
@@ -17,6 +18,8 @@ public class TrafficRemote {
 		chandle = new CommandHandler(this);
 		//aserial = new ArduinoSerial(this);
 		nethandle = new NetworkHandler(this);
+		nethandlee = new Thread(nethandle,"T1");
+        nethandlee.start();
 		//networkReady = aserial.initialize();
 		startClient();
 	}
@@ -25,7 +28,6 @@ public class TrafficRemote {
 		while(true){
 			//proccess some stuff here
 			tgui.tick();
-			nethandle.tick();
 		}
 	}
 	

@@ -8,7 +8,7 @@ import java.util.Timer;
 
 import javax.swing.JOptionPane;
 
-public class NetworkHandler {
+public class NetworkHandler implements Runnable{
 	Socket sslSocket = null;
 	DataOutputStream out;
 	DataInputStream in;
@@ -22,7 +22,7 @@ public class NetworkHandler {
 	
 	public void connect(){
 	    try {
-            sslSocket = new Socket("wltd.org", 25455);   //not an ssl socket, just pretend since my god ssl is a project of its own
+            sslSocket = new Socket("localhost", 25455);   //not an ssl socket, just pretend since my god ssl is a project of its own
             out = new DataOutputStream(sslSocket.getOutputStream());
             out.writeByte(0x02); //write out a byte to tell the server that we are a link module
             in = new DataInputStream(sslSocket.getInputStream());
@@ -48,28 +48,12 @@ public class NetworkHandler {
 	public void sendSet(String values) throws IOException{ //modify this to include some sort of ID if we want multiple lights on this server *ugh*		
 		out.writeByte(0x01); //write out that our packet id is 1
 		out.writeUTF(values); //write out the light status
-		
-		int result = in.readByte(); //we expect a result, otherwise we assume something went wrong
-		if(result == 0x01){
-		   System.out.println("Command transmited successfully");
-		}else if(result == 0x02){
-		   System.out.println("Could not verify origin, please check server log");
-		   JOptionPane.showMessageDialog(null, "Could not verify origin, please check server log");
-		}
-		System.out.println("Server says: " + result);
+		out.flush();
 	}
 	
 	public void sendReset() throws IOException{
 	    out.writeByte(0x02); //write out that our packet id is 1
-        
-        int result = in.readByte(); //we expect a result, otherwise we assume something went wrong
-        if(result == 0x01){
-           System.out.println("Command transmited successfully");
-        }else if(result == 0x02){
-           System.out.println("Could not verify origin, please check server log");
-           JOptionPane.showMessageDialog(null, "Could not verify origin, please check server log");
-        }
-        System.out.println("Server says: " + result);
+        out.flush();
 	}
 	
 	public void readDataStream(){
@@ -78,7 +62,6 @@ public class NetworkHandler {
 		    byte packetid = in.readByte();
             if(packetid == 1){ //set traffic lights
                 String data = in.readUTF();
-                System.out.println("Data was: " + data);
                 link.tgui.insertText("Lights set to: " + data, "blue");
                 //Il faut changer les lumiere à leur nouvelle état graphiquement
                 setLights(data);
@@ -115,6 +98,8 @@ public class NetworkHandler {
         link.tgui.trcf.red2on = false;
         link.tgui.trcf.ped1blue = false;
         link.tgui.trcf.ped2blue = false;
+        link.tgui.trcf.ped1orange = 1; //un c'est on (la lumiere d'arret des pieton est off par defaut)
+        link.tgui.trcf.ped2orange = 1;
 	    for(int i = 0; i < 8; i++){
 	        if(status.charAt(i) == '1'){
 	            switch(i){
@@ -138,19 +123,21 @@ public class NetworkHandler {
 	                  break;
 	              case 6:
 	                  link.tgui.trcf.ped1blue = true;
+	                  link.tgui.trcf.ped1orange = 0; //si les pieton peuve allez, fermer la lumiere d'arret
 	                  break;
 	              case 7:
 	                  link.tgui.trcf.ped2blue = true;
+	                  link.tgui.trcf.ped2orange = 0; //si les pieton peuve allez, fermer la lumiere d'arret
 	            }
 	        }else if(status.charAt(i) == '2'){
 	            if(i == 6){
-	                link.tgui.trcf.ped1orange = true;
+	                link.tgui.trcf.ped1orange = 2;
 	            }else if(i == 7){
-	                link.tgui.trcf.ped2orange = true;
+	                link.tgui.trcf.ped2orange = 2;
 	            }
 	        }
 	    }
-	    link.tgui.trcf.repaint();
+	    //link.tgui.trcf.repaint();
 	}
 	
 	public void tick(){
@@ -159,11 +146,20 @@ public class NetworkHandler {
 
 
     public void sendPause() throws IOException {
-        out.writeByte(0x02); //write out that our packet id is 1
+        out.writeByte(0x03); //write out that our packet id is 1
+        out.flush();
     }
     
     public void sendResume() throws IOException {
-        out.writeByte(0x03); //write out that our packet id is 1
+        out.writeByte(0x04); //write out that our packet id is 1
+        out.flush();
+    }
+
+    @Override
+    public void run() {
+        while(true){ //ticker la fonction
+            tick();
+        }
     }
 
 }

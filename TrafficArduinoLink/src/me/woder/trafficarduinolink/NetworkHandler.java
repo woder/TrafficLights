@@ -16,7 +16,7 @@ public class NetworkHandler {
 	public NetworkHandler(TrafficArduinoLink link){
 		this.link = link;
 		try {
-			sslSocket = new Socket("wltd.org", 25455);	 //not an ssl socket, just pretend since my god ssl is a project of its own
+			sslSocket = new Socket("localhost", 25455);	 //not an ssl socket, just pretend since my god ssl is a project of its own
 			out = new DataOutputStream(sslSocket.getOutputStream());
 			out.writeByte(0x01); //write out a byte to tell the server that we are a link module
 			in = new DataInputStream(sslSocket.getInputStream());

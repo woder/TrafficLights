@@ -18,8 +18,8 @@ void setup() {
     pinMode(trafficLightPins[i], OUTPUT);
   }
 
-  pinMode(sensors1, INPUT);
-  pinMode(sensors2, INPUT);
+  pinMode(sensor1, INPUT);
+  pinMode(sensor2, INPUT);
   
   Serial.begin(9600);
 }

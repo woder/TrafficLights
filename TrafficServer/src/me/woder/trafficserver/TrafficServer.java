@@ -23,6 +23,7 @@ public class TrafficServer{
 	Thread client;
 	Thread ircs;
 	Thread commands;
+	Thread tmanagere;
 	
 	public static void main(String[] args){
 	    new TrafficServer();
@@ -31,13 +32,12 @@ public class TrafficServer{
 	public TrafficServer(){
         System.out.println("TrafficServer started!");
         tmanager = new TrafficManager(this);
+        tmanagere = new Thread(tmanager,"T2");
+        tmanagere.start();
 		running = true;	
 		servers = new ConnectionManager(this, 25455);
 		server = new Thread(servers,"T1");
 		server.start();
-		while(true){
-		   tmanager.tick();
-		}
 	}
 	
 	public String readString(DataInputStream in, int length){

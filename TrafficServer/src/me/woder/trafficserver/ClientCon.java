@@ -47,10 +47,10 @@ public void run() { //TODO make this relevant to the network code of the client
            		String stats = in.readUTF();
            		int sensor = in.readInt();   	 
               }
-            }else if(id == 0x02){
+            }else if(id == 0x03){
               global.trunning = false;
               global.log.info("Tmanager stopped");
-            }else if(id == 0x03){
+            }else if(id == 0x04){
               global.trunning = true;
               global.log.info("Tmanager started");
             }else{
@@ -59,19 +59,13 @@ public void run() { //TODO make this relevant to the network code of the client
                     System.out.println("Set command received: " + stats);
                     List<ClientCon> players = (LinkedList<ClientCon>) global.players.clone();
                     for(ClientCon p : players){ //loop over all the currently open connections looking for the clienttype of 1 (the arduino link module)
-                        if(p.clientType == 1){
                             p.sendSet(stats);
-                        }
                     }
-                    out.writeByte(0x01); //send that everything is okay ! :D
                 }else if(id == 0x02){
                 	List<ClientCon> players = (LinkedList<ClientCon>) global.players.clone();
                     for(ClientCon p : players){ //loop over all the currently open connections looking for the clienttype of 1 (the arduino link module)
-                        if(p.clientType == 1){
                             p.sendReset();
-                        }
                     }
-                    out.writeByte(0x01); //send that everything is okay ! :D
                 }
             }
         }

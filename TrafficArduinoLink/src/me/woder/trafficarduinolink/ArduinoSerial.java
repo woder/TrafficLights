@@ -22,6 +22,8 @@ public class ArduinoSerial implements SerialPortEventListener {
 //        "/dev/usbdev", // Linux
 //        "/dev/tty", // Linux
 //        "/dev/serial", // Linux
+       // "COM1",
+        "COM3",
         "COM4", // Windows
         "COM5", //windows
     };

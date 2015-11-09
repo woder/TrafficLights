@@ -32,6 +32,7 @@ public class TrafficGui {
 	private JTextPane textArea;
 	public DefaultStyledDocument doc = new DefaultStyledDocument();
 	public HashMap<String, AttributeSet> attributes;
+	long lastTime = 0; //la derniere fois que nous avons painturer l'écran
 	
 	public TrafficGui(TrafficRemote traffice) {
 		this.traffic = traffice;
@@ -163,7 +164,11 @@ public class TrafficGui {
 	}
 
 	public void tick() {
-
+	    long currentTime = System.currentTimeMillis(); 
+	    if(currentTime - lastTime > 10) { //si il y a plus d'une seconde qu'on a changer t'etas, change le encore
+	        lastTime = currentTime;
+            trcf.repaint();
+        }
 	}
 
 }

@@ -3,7 +3,7 @@ package me.woder.trafficserver;
 import java.util.LinkedList;
 import java.util.List;
 
-public class TrafficManager {
+public class TrafficManager implements Runnable{
 	public int scenes = 5; //the amount of different "scenes we have" is basically just the different ways to light the lights
 	public int[] defaultDurations = {10000, 4000, 3000, 10000, 4000, 3000}; //the array that stays static for the time of each scene
 	public int[] durations = {10000, 4000, 3000, 10000, 4000, 3000}; //the array that can change based on sensor data :o
@@ -16,9 +16,8 @@ public class TrafficManager {
 		this.tServer = trafficServer;
 	}
 
-	public void tick() { //this method is called every millisecond
-	  if(tServer.trunning){ 
-		long currentTime = System.currentTimeMillis();
+	public void tick() { //this method is called every millisecond 
+	   long currentTime = System.currentTimeMillis();
 		if(currentTime - previousCars < durations[currentScene]) { //if the current time minus the last time we changed scene is less than the required duration to change scene, then just tick the scene in question
 		    situation(currentScene); //tick the scene
 		} else {
@@ -29,7 +28,6 @@ public class TrafficManager {
 		      currentScene++; //increase the scene count
 		    }
 		}
-	  }
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -60,15 +58,23 @@ public class TrafficManager {
 	   long currentTime = System.currentTimeMillis();
 	   
 	   if(currentTime - lastPacketTime > 2000){
-		System.out.println("The lights are: " + lights);
-	    List<ClientCon> players = (LinkedList<ClientCon>) tServer.players.clone();
-	    for(ClientCon p : players){ //loop over all the currently open connections looking for the clienttype of 1 (the arduino link module)
-            if(p.clientType == 1 || p.clientType == 2){
-                p.sendSet(lights);
-            }
-        }
+	    if(tServer.trunning){
+		 //System.out.println("The lights are: " + lights);
+	     List<ClientCon> players = (LinkedList<ClientCon>) tServer.players.clone();
+	     for(ClientCon p : players){ //loop over all the currently open connections looking for the clienttype of 1 (the arduino link module)
+             if(p.clientType == 1 || p.clientType == 2){
+                 p.sendSet(lights);
+             }
+         }
+	    }
 	    lastPacketTime = currentTime;
 	   }
 	}
+
+    public void run() {
+        while(true){         
+            tick();
+        }
+    }
 
 }

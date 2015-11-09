@@ -19,7 +19,7 @@ public class CommandHandler {
 	        public void runCommand(TrafficRemote traffic, String command, String[] args) { 
 	               if(args.length > 5){
 	                   //in this case we would send the arduino the code for changing the lights
-	            	   String snd = args[1]+args[2]+args[3]+args[4]+args[5]+args[5]+args[6]+args[7]+"\n";
+	            	   String snd = args[1]+args[2]+args[3]+args[4]+args[5]+args[6]+args[7]+args[8]+"\n";
 	            	   try {
                         traffic.nethandle.sendSet(snd);
                        } catch (IOException e) {
