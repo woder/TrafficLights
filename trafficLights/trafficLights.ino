@@ -98,7 +98,7 @@ void loop() {
     }else{
       unsigned long timeoutTimer = millis();
   
-      if(timeoutTimer >= 5000) {
+      while(timeoutTimer >= 5000) {
         for(int i = 0; i < 10; i++) {
           digitalWrite(trafficLightPins[i], LOW);
         }
