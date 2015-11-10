@@ -48,11 +48,11 @@ public class TrafficManager implements Runnable{
 	      lights = "00110001\n"; // gyr1, gyr2, ped1, ped2 ; red on, green on, pedestrians for the road thats red go
 	      break;
 	    case 4:
-	      lights = "10000102\n"; // gyr1, gyr2, ped1, ped2 ; red on, yellow on, pedestrians for the road thats red caution
+	      lights = "00101002\n"; // gyr1, gyr2, ped1, ped2 ; green on, yellow on, pedestrians for the road thats red caution
 	      break;            // 1 is ON and 0 is OFF
 	    case 5:
-	      lights = "01000100\n"; // gyr1, gyr2, ped1, ped2 ; red on, red on, pedestrians for the road thats red stop
-	      break;
+	      lights = "00100100\n"; // gyr1, gyr2, ped1, ped2 ; red on, red on, pedestrians for the road thats red stop
+	      break; 
 	   }
 	   
 	   long currentTime = System.currentTimeMillis();
