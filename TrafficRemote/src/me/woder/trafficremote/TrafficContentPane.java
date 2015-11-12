@@ -48,7 +48,7 @@ public class TrafficContentPane extends JPanel{
 			carSouth = ImageIO.read(new File("car_south.png"));
 			carEast = ImageIO.read(new File("car_east.png"));
 			carWest = ImageIO.read(new File("car_west.png"));
-			Car car = new Car(0,0,0);
+			Car car = new Car(0,0);
 			car.x = 359;
         	car.y = 0;
 			cars.add(car);
@@ -74,7 +74,7 @@ public class TrafficContentPane extends JPanel{
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         g.drawImage(image, 0, 0, null); // see javadoc for more info on the parameters  
-        //nos variable pour décrire l'étas des lumière graphiquemen
+        //nos variable pour dï¿½crire l'ï¿½tas des lumiï¿½re graphiquemen
         long currentTime = System.currentTimeMillis();       
         if(redon){
             //161, 45
