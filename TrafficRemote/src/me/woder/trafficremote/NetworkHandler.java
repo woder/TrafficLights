@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.Timer;
 
-import javax.swing.JOptionPane;
 
 public class NetworkHandler implements Runnable{
 	Socket sslSocket = null;
@@ -30,7 +29,7 @@ public class NetworkHandler implements Runnable{
             System.out.println("Response: " + response); //the response should be 1 (the server mirrors what we send)
             link.networkReady = true;
         } catch (IOException e) {
-            link.tgui.insertText("An error occured! Tell the developers this: " + e.getMessage(), "red");
+            link.tgui.insertText("An error occured! Tell the developers this: " + e.getMessage() + "\n", "red");
             time = new java.util.Timer();
             time.schedule( 
                     new java.util.TimerTask() {
@@ -73,7 +72,7 @@ public class NetworkHandler implements Runnable{
 		} catch (IOException e) {
 			e.printStackTrace();
 			link.networkReady = false;
-			link.tgui.insertText("A connection error occured! Retrying in 10 seconds.", "red");
+			link.tgui.insertText("A connection error occured! Retrying in 10 seconds." + "\n", "red");
 			time = new java.util.Timer();
 			time.schedule( 
 			        new java.util.TimerTask() {
