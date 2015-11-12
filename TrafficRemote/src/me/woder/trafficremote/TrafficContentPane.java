@@ -8,6 +8,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
@@ -16,6 +18,10 @@ public class TrafficContentPane extends JPanel{
 	private static final long serialVersionUID = 1L;
 	Image image; //la photo d'arriere plan
 	Image foreground; //la photo de premier plan
+	Image carNorth; //les images de chaque auto
+	Image carSouth;
+	Image carEast;
+	Image carWest;
 	long lastTime = 0; //le dernier temps enregister pour les clingnotant (lumiere 1)
 	long lastTime2 = 0; //le dernier temps enregister pour les clingnotant (lumiere 2)
 	int imgheight = 694;
@@ -32,11 +38,21 @@ public class TrafficContentPane extends JPanel{
 	public boolean ped2blue = false;
 	boolean ped1 = false; //variable pour clingnoter les lumiere
 	boolean ped2 = false; //variable pour clingnoter les lumiere
+	public List<Car> cars = new ArrayList<Car>();
 
 	public TrafficContentPane() {
 		try{
 			image = ImageIO.read(new File("background.jpg"));
 			foreground = ImageIO.read(new File("foreground.png"));
+			carNorth = ImageIO.read(new File("car_north.png"));
+			carSouth = ImageIO.read(new File("car_south.png"));
+			carEast = ImageIO.read(new File("car_east.png"));
+			carWest = ImageIO.read(new File("car_west.png"));
+			Car car = new Car(0,0,0);
+			car.x = 359;
+        	car.y = 0;
+			cars.add(car);
+			
 			this.addMouseListener(new MouseAdapter() { 
 		          public void mousePressed(MouseEvent me) { 
 		              int screenX = me.getX();
@@ -142,6 +158,14 @@ public class TrafficContentPane extends JPanel{
         }
         
         g.drawImage(foreground, 0, 0, null); //ajoute notre image transparente pour faire une belle effet
+        
+        //les auto maintenant
+        for(Car car : cars){
+        	car.direction = 1;      
+        	car.isMoving = true;
+        	g.drawImage(carSouth, car.getX(), car.getY(), null);
+        	car.tick();
+        }
     }
 	
 	public void drawCenteredCircle(Graphics g, int x, int y, int r) {

@@ -10,8 +10,8 @@ boolean pedtoggle = false; //are we toggling the ped1
 boolean ped2toggle = false; //are we toggling the ped2
 int pedstate = 0;
 int ped2state = 0;
-int sensorData1 = 0;
-int sensorData2 = 0;
+long sensorData1 = 0;
+long sensorData2 = 0;
 
 void setup() {
   for(int i = 0; i < 10; i++) {
@@ -116,6 +116,7 @@ void loop() {
   sensorData2 = analogRead(sensor2);
   sensorData2 = map(sensorData2, 0, 1023, 0, 255);
   sensorData2 = constrain(sensorData2, 0, 255);
+  //Serial.println(sensorData1);
   if(sensorData1 > 127) {
     Serial.write(2);
     Serial.write(sensorData1);

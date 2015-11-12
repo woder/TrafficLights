@@ -3,6 +3,7 @@ package me.woder.trafficarduinolink;
 public class TrafficArduinoLink {
 	ArduinoSerial aserial;
 	NetworkHandler nethandle;
+	boolean networkReady = false;
 	
 	public static void main(String[] args){
 		new TrafficArduinoLink();
