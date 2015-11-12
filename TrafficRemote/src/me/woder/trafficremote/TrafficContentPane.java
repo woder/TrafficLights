@@ -39,6 +39,7 @@ public class TrafficContentPane extends JPanel{
 	boolean ped1 = false; //variable pour clingnoter les lumiere
 	boolean ped2 = false; //variable pour clingnoter les lumiere
 	public List<Car> cars = new ArrayList<Car>();
+	long carSpawntime = 0; //the temporary car spawner to show what I've made :)
 
 	public TrafficContentPane() {
 		try{
@@ -48,11 +49,7 @@ public class TrafficContentPane extends JPanel{
 			carSouth = ImageIO.read(new File("car_south.png"));
 			carEast = ImageIO.read(new File("car_east.png"));
 			carWest = ImageIO.read(new File("car_west.png"));
-			Car car = new Car(0,0);
-			car.x = 359;
-        	car.y = 0;
-			cars.add(car);
-			
+			this.addCar(2);
 			this.addMouseListener(new MouseAdapter() { 
 		          public void mousePressed(MouseEvent me) { 
 		              int screenX = me.getX();
@@ -65,6 +62,44 @@ public class TrafficContentPane extends JPanel{
 		}
 	}
 	
+	public void addCar(int direction){
+		Car car;
+		switch(direction){		
+		case 0:
+			car = new Car(this, 335,500, 0); //les cordoner de l'auto au debut   
+        	car.isMoving = true;
+			cars.add(car);
+			break;
+		case 1:
+		    car = new Car(this, 255,-128, 1);     
+        	car.isMoving = true;
+			cars.add(car);
+			break;
+		case 2:
+			car = new Car(this, -128,224, 2);   
+        	car.isMoving = true;
+			cars.add(car);
+			break;
+		case 3:
+			car = new Car(this, 828,160, 3);   
+        	car.isMoving = true;
+			cars.add(car);
+			break;
+		}
+	}
+	
+	public void setCarsStop(boolean stopped){
+		for(Car car : cars){
+			car.xStopped = stopped;
+		}
+	}
+	
+    public void setCarsStop2(boolean stopped){
+    	for(Car car : cars){
+			car.yStopped = stopped;
+		}
+	}
+	
 	@Override
 	public Dimension getPreferredSize() {
 	      return new Dimension(imgheight, imgwidth);
@@ -74,12 +109,17 @@ public class TrafficContentPane extends JPanel{
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         g.drawImage(image, 0, 0, null); // see javadoc for more info on the parameters  
-        //nos variable pour d�crire l'�tas des lumi�re graphiquemen
-        long currentTime = System.currentTimeMillis();       
+        //nos variable pour decrire l'etas des lumiere graphiquemen
+        long currentTime = System.currentTimeMillis();   
+        if(currentTime - carSpawntime > 10000){
+        	carSpawntime = currentTime;
+        	addCar((int)(Math.random() * (4)));
+        }
         if(redon){
             //161, 45
             g.setColor(new Color(255,0,0));
             this.drawCenteredCircle(g, 168, 47, 45);
+            this.setCarsStop(true); //passon l'information a nos amis
         }
         if(yellowon){
             //107, 45
@@ -90,6 +130,7 @@ public class TrafficContentPane extends JPanel{
             //42, 45
             g.setColor(new Color(0,255,0));
             this.drawCenteredCircle(g, 42, 47, 45);
+            this.setCarsStop(false);
         }
         if(ped1blue){
             //186, 116
@@ -120,6 +161,7 @@ public class TrafficContentPane extends JPanel{
             //653, 51
             g.setColor(new Color(255,0,0));
             this.drawCenteredCircle(g, 653, 51, 45);
+            this.setCarsStop2(true); //passon l'information a nos amis
         }
         if(yellow2on){
             //592, 51
@@ -130,6 +172,7 @@ public class TrafficContentPane extends JPanel{
             //527, 51
             g.setColor(new Color(0,255,0));
             this.drawCenteredCircle(g, 527, 51, 45);
+            this.setCarsStop2(false); //passon l'information a nos amis
         }
         if(ped2orange == 1){
             //505, 116
@@ -160,11 +203,10 @@ public class TrafficContentPane extends JPanel{
         g.drawImage(foreground, 0, 0, null); //ajoute notre image transparente pour faire une belle effet
         
         //les auto maintenant
-        for(Car car : cars){
-        	car.direction = 1;      
-        	car.isMoving = true;
-        	g.drawImage(carSouth, car.getX(), car.getY(), null);
+        List<Car> tempCars = new ArrayList<Car>(cars); //eviter un concurentModificationException
+        for(Car car : tempCars){
         	car.tick();
+        	g.drawImage(car.getImage(), car.getX(), car.getY(), null);
         }
     }
 	
