@@ -18,10 +18,10 @@ void setup() {
     pinMode(trafficLightPins[i], OUTPUT); // Initialiser tous les pins des DELs en tant que sortie
   }
 
-  pinMode(sensor1, INPUT);                // Initialiser le pin du senseur sur la voie principale en tant qu'entrée
-  pinMode(sensor2, INPUT);                // Initialiser le pin du senseur sur la voie transversale en tant qu'entrée
+  pinMode(sensor1, INPUT); // Initialiser le pin du senseur sur la voie principale en tant qu'entrée
+  pinMode(sensor2, INPUT); // Initialiser le pin du senseur sur la voie transversale en tant qu'entrée
   
-  Serial.begin(9600);                     // Commencer la connexion en série à 9600Bd
+  Serial.begin(9600); // Commencer la connexion en série à 9600Bd
 }
 
 void loop() {
