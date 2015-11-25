@@ -25,7 +25,7 @@ void setup() {
 }
 
 void loop() {
-  unsigned long sensorCheck = millis();
+  unsigned long sensorCheck = millis(); // Une minuterie pour quand vérifier les données des senseurs
   
   blinkPed1(trafficLightPins[7]);
   blinkPed2(trafficLightPins[9]);
