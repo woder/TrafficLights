@@ -1,56 +1,31 @@
-int trafficLightPins[] = {4, 5, 6, 9, 10, 11, 7, 8, 12, 13}; //green, yellow, red; green yellow red; ped blue ped orange; ped blue ped orange
-int sensor1 = 0;
-int sensor2 = 1;
-int sensor3 = 2; // pin for the main way sensors
-int sensor4 = 3; // pin for the cross way sensors
+int trafficLightPins[] = {4, 5, 6, 9, 10, 11, 7, 8, 12, 13}; // Vert, jaune, rouge; vert, jaune, rouge; bleu, orange; bleu, orange
+int sensor1 = 2;                                             // Pin pour les senseurs sur la voie principale
+int sensor2 = 3;                                             // Pin pour les senseurs sur la voie transversale
 long previousPeds = 0;
-long interval = 300;	//blink interval for pedestrians
-int ledState = 0; // temp var for switching light state
+long interval = 300;                                         // Durée de l'intervalle de clignotement de la lumière pour piétons
+int ledState = 0;                                            // Variable temporaire pour changer l'état des DELs
 int i = 0;
-int recv = 0; // byte received on the serial port
-boolean pedtoggle = false; //are we toggling the ped1
-boolean ped2toggle = false; //are we toggling the ped2
-int pedstate = 0;
-int ped2state = 0;
-int sensorData1 = 0;
-int sensorData2 = 0;
-int sensorData3 = 0;
-int sensorData4 = 0;
-long lastSensor1 = 0;
-long lastSensor2 = 0;
-long lastSensor3 = 0;
-long lastSensor4 = 0;
-
-long sensorInterval = 1000;
+int recv = 0;                                                // Octet reçu sur la connexion en série
+boolean pedtoggle = false;                                   // Faire clignoter ou non la lumière pour piétons sur la voie principale
+boolean ped2toggle = false;                                  // Faire clignoter ou non la lumière pour piétons sur la voie transversale
+int pedstate = 0;                                            // État de la lumière pour piétons sur la voie principale
+int ped2state = 0;                                           // État de la lumière pour piétons sur la voie transversale
+long sensorData1 = 0;                                        // État analogue du senseur piézo sur la voie principale
+long sensorData2 = 0;                                        // État analogue du senseur piézo sur la voie transversale
 
 void setup() {
   for(int i = 0; i < 10; i++) {
-    pinMode(trafficLightPins[i], OUTPUT);
+    pinMode(trafficLightPins[i], OUTPUT); // Initialiser tous les pins des DELs en tant que sortie
   }
 
-  pinMode(sensor1, INPUT);
-  pinMode(sensor2, INPUT);
+  pinMode(sensor1, INPUT); // Initialiser le pin du senseur sur la voie principale en tant qu'entrée
+  pinMode(sensor2, INPUT); // Initialiser le pin du senseur sur la voie transversale en tant qu'entrée
   
-  Serial.begin(9600);
+  Serial.begin(9600); // Commencer la connexion en série à 9600Bd
 }
 
 void loop() {
-  /*
-  // while there is no serial connection, flash red lights to treat as 4-way stop
-  while (!Serial) {
-    unsigned long timeoutTimer = millis();
-
-    if(timeoutTimer >= 5000) {
-      for(int i = 0; i < 10; i++) {
-        digitalWrite(trafficLightPins[i], LOW);
-      }
-      delay(2500);
-      digitalWrite(trafficLightPins[2], HIGH);
-      digitalWrite(trafficLightPins[5], HIGH);
-      delay(2500);
-    }
-  }
-  */
+  unsigned long sensorCheck = millis(); // Une minuterie pour quand vérifier les données des senseurs
   
   blinkPed1(trafficLightPins[7]);
   blinkPed2(trafficLightPins[9]);
@@ -105,8 +80,8 @@ void loop() {
            }
          }
       }
-    }
-    /*  unsigned long timeoutTimer = millis();
+    }else{
+      unsigned long timeoutTimer = millis();
   
       while(timeoutTimer >= 5000) {
         for(int i = 0; i < 10; i++) {
@@ -116,41 +91,26 @@ void loop() {
         digitalWrite(trafficLightPins[2], HIGH);
         digitalWrite(trafficLightPins[5], HIGH);
         delay(2500);
-      }*/
+      }
+    }
   }
 
-  sensorData1 = analogRead(sensor1);
-  sensorData1 = map(sensorData1, 0, 1023, 0, 255);
-  sensorData1 = constrain(sensorData1, 0, 255);
-  sensorData2 = analogRead(sensor2);
-  sensorData2 = map(sensorData2, 0, 1023, 0, 255);
-  sensorData2 = constrain(sensorData2, 0, 255);
-  sensorData3 = analogRead(sensor3);
-  sensorData3 = map(sensorData3, 0, 1023, 0, 255);
-  sensorData3 = constrain(sensorData3, 0, 255);
-  sensorData4 = analogRead(sensor4);
-  sensorData4 = map(sensorData4, 0, 1023, 0, 255);
-  sensorData4 = constrain(sensorData4, 0, 255);
-  unsigned long sensorTime = millis();
-  if(sensorData1 > 110 && sensorTime - lastSensor1 > sensorInterval) {
-    Serial.write(2);
-    Serial.write(sensorData1);
-    lastSensor1 = sensorTime;
-  }
-  if(sensorData2 > 110 && sensorTime - lastSensor2 > sensorInterval) {
-    Serial.write(3);
-    Serial.write(sensorData2);
-    lastSensor2 = sensorTime;
-  }
-  if(sensorData3 > 110 && sensorTime - lastSensor3 > sensorInterval) {
-    Serial.write(4);
-    Serial.write(sensorData3);
-    lastSensor3 = sensorTime;
-  }
-  if(sensorData4 > 110 && sensorTime - lastSensor4 > sensorInterval) {
-    Serial.write(5);
-    Serial.write(sensorData4);
-    lastSensor4 = sensorTime;
+  if(sensorCheck%1000 == 0) {
+    sensorData1 = analogRead(sensor1);
+    sensorData1 = map(sensorData1, 0, 1023, 0, 255);
+    sensorData1 = constrain(sensorData1, 0, 255);
+    sensorData2 = analogRead(sensor2);
+    sensorData2 = map(sensorData2, 0, 1023, 0, 255);
+    sensorData2 = constrain(sensorData2, 0, 255);
+    //Serial.println(sensorData1);
+    if(sensorData1 > 127) {
+      Serial.write(2);
+      Serial.write(sensorData1);
+    }
+    if(sensorData2 > 127) {
+      Serial.write(3);
+      Serial.write(sensorData2);
+    }
   }
 }
 
