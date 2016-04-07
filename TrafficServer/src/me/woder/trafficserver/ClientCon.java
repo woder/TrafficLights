@@ -44,8 +44,8 @@ public void run() { //TODO make this relevant to the network code of the client
             global.log.info("" + id);
             if(clientType == 1){
               if(id == 0x01){
-           		String stats = in.readUTF();
-           		int sensor = in.readInt();   	 
+           		int sensorId = in.readInt();
+           		global.tmanager.reduceTime(sensorId);
               }
             }else if(id == 0x03){
               global.trunning = false;

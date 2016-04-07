@@ -1,6 +1,8 @@
 int trafficLightPins[] = {4, 5, 6, 9, 10, 11, 7, 8, 12, 13}; //green, yellow, red; green yellow red; ped blue ped orange; ped blue ped orange
-int sensor1 = 2; // pin for the main way sensors
-int sensor2 = 3; // pin for the cross way sensors
+int sensor1 = 0;
+int sensor2 = 1;
+int sensor3 = 2; // pin for the main way sensors
+int sensor4 = 3; // pin for the cross way sensors
 long previousPeds = 0;
 long interval = 300;	//blink interval for pedestrians
 int ledState = 0; // temp var for switching light state
@@ -10,8 +12,16 @@ boolean pedtoggle = false; //are we toggling the ped1
 boolean ped2toggle = false; //are we toggling the ped2
 int pedstate = 0;
 int ped2state = 0;
-long sensorData1 = 0;
-long sensorData2 = 0;
+int sensorData1 = 0;
+int sensorData2 = 0;
+int sensorData3 = 0;
+int sensorData4 = 0;
+long lastSensor1 = 0;
+long lastSensor2 = 0;
+long lastSensor3 = 0;
+long lastSensor4 = 0;
+
+long sensorInterval = 1000;
 
 void setup() {
   for(int i = 0; i < 10; i++) {
@@ -95,8 +105,8 @@ void loop() {
            }
          }
       }
-    }else{
-      unsigned long timeoutTimer = millis();
+    }
+    /*  unsigned long timeoutTimer = millis();
   
       while(timeoutTimer >= 5000) {
         for(int i = 0; i < 10; i++) {
@@ -106,8 +116,7 @@ void loop() {
         digitalWrite(trafficLightPins[2], HIGH);
         digitalWrite(trafficLightPins[5], HIGH);
         delay(2500);
-      }
-    }
+      }*/
   }
 
   sensorData1 = analogRead(sensor1);
@@ -116,14 +125,32 @@ void loop() {
   sensorData2 = analogRead(sensor2);
   sensorData2 = map(sensorData2, 0, 1023, 0, 255);
   sensorData2 = constrain(sensorData2, 0, 255);
-  //Serial.println(sensorData1);
-  if(sensorData1 > 127) {
+  sensorData3 = analogRead(sensor3);
+  sensorData3 = map(sensorData3, 0, 1023, 0, 255);
+  sensorData3 = constrain(sensorData3, 0, 255);
+  sensorData4 = analogRead(sensor4);
+  sensorData4 = map(sensorData4, 0, 1023, 0, 255);
+  sensorData4 = constrain(sensorData4, 0, 255);
+  unsigned long sensorTime = millis();
+  if(sensorData1 > 110 && sensorTime - lastSensor1 > sensorInterval) {
     Serial.write(2);
     Serial.write(sensorData1);
+    lastSensor1 = sensorTime;
   }
-  if(sensorData2 > 127) {
+  if(sensorData2 > 110 && sensorTime - lastSensor2 > sensorInterval) {
     Serial.write(3);
     Serial.write(sensorData2);
+    lastSensor2 = sensorTime;
+  }
+  if(sensorData3 > 110 && sensorTime - lastSensor3 > sensorInterval) {
+    Serial.write(4);
+    Serial.write(sensorData3);
+    lastSensor3 = sensorTime;
+  }
+  if(sensorData4 > 110 && sensorTime - lastSensor4 > sensorInterval) {
+    Serial.write(5);
+    Serial.write(sensorData4);
+    lastSensor4 = sensorTime;
   }
 }
 

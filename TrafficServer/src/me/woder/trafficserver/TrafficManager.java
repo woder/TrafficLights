@@ -4,9 +4,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class TrafficManager implements Runnable{
-	public int scenes = 5; //the amount of different "scenes we have" is basically just the different ways to light the lights
+	public int scenes = 7; //the amount of different "scenes we have" is basically just the different ways to light the lights
 	public int[] defaultDurations = {10000, 4000, 3000, 10000, 4000, 3000}; //the array that stays static for the time of each scene
-	public int[] durations = {10000, 4000, 3000, 10000, 4000, 3000}; //the array that can change based on sensor data :o
+	public int[] durations = {10000, 4000, 4000, 3000, 10000, 4000, 4000, 3000}; //the array that can change based on sensor data :o
 	public long previousCars = 0;
 	public int currentScene = 0; //the scene number we are currently on
 	private TrafficServer tServer;
@@ -39,18 +39,22 @@ public class TrafficManager implements Runnable{
 	      lights = "10000110\n"; // gyr1, gyr2, ped1, ped2 ; green on, red on, pedestrians for the road thats red go
 	      break;            // 1 is ON and 0 is OFF
 	    case 1:
-	      lights = "01000120\n"; // gyr1, gyr2, ped1, ped2 ; yellow on, red on, pedestrians for the road thats red caution
-	      break;            // 1 is ON and 0 is OFF
+	      lights = "10000120\n";
 	    case 2:
+	      lights = "01000100\n"; // gyr1, gyr2, ped1, ped2 ; yellow on, red on, pedestrians for the road thats red caution
+	      break;            // 1 is ON and 0 is OFF
+	    case 3:
 	      lights = "00100100\n"; // gyr1, gyr2, ped1, ped2 ; red on, red on, pedestrians for the road thats red stop
 	      break;
-	    case 3:
+	    case 4:
 	      lights = "00110001\n"; // gyr1, gyr2, ped1, ped2 ; red on, green on, pedestrians for the road thats red go
 	      break;
-	    case 4:
+	    case 5:
+	      lights = "00110002\n";
+	    case 6:
 	      lights = "00101002\n"; // gyr1, gyr2, ped1, ped2 ; green on, yellow on, pedestrians for the road thats red caution
 	      break;            // 1 is ON and 0 is OFF
-	    case 5:
+	    case 7:
 	      lights = "00100100\n"; // gyr1, gyr2, ped1, ped2 ; red on, red on, pedestrians for the road thats red stop
 	      break; 
 	   }
@@ -69,6 +73,14 @@ public class TrafficManager implements Runnable{
 	    }
 	    lastPacketTime = currentTime;
 	   }
+	}
+	
+	public void reduceTime(int type){
+		if(type == 0){
+			
+		}else if(type == 1){
+			
+		}
 	}
 
     public void run() {

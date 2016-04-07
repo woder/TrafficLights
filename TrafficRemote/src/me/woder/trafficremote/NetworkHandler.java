@@ -21,7 +21,7 @@ public class NetworkHandler implements Runnable{
 	
 	public void connect(){
 	    try {
-            sslSocket = new Socket("localhost", 25455);   //not an ssl socket, just pretend since my god ssl is a project of its own
+            sslSocket = new Socket("wltd.org", 25455);   //not an ssl socket, just pretend since my god ssl is a project of its own
             out = new DataOutputStream(sslSocket.getOutputStream());
             out.writeByte(0x02); //write out a byte to tell the server that we are a link module
             in = new DataInputStream(sslSocket.getInputStream());
@@ -62,7 +62,7 @@ public class NetworkHandler implements Runnable{
             if(packetid == 1){ //set traffic lights
                 String data = in.readUTF();
                 link.tgui.insertText("Lights set to: " + data, "blue");
-                //Il faut changer les lumiere à leur nouvelle état graphiquement
+                //Il faut changer les lumiere ï¿½ leur nouvelle ï¿½tat graphiquement
                 setLights(data);
             }else if(packetid == 2){ //sensor data
                 String data = in.readUTF();

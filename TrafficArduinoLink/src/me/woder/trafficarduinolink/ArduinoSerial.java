@@ -1,14 +1,17 @@
 package me.woder.trafficarduinolink;
 
-import gnu.io.CommPortIdentifier;
-import gnu.io.SerialPort;
-import gnu.io.SerialPortEvent;
-import gnu.io.SerialPortEventListener;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.Enumeration;
+
+import javax.swing.JOptionPane;
+
+import gnu.io.CommPortIdentifier;
+import gnu.io.SerialPort;
+import gnu.io.SerialPortEvent;
+import gnu.io.SerialPortEventListener;
 
 /**
  * @author ericjbruno
@@ -22,8 +25,8 @@ public class ArduinoSerial implements SerialPortEventListener {
 //        "/dev/usbdev", // Linux
 //        "/dev/tty", // Linux
 //        "/dev/serial", // Linux
-       // "COM1",
-        //"COM3",
+        "COM1",
+        "COM3",
         "COM4", // Windows
         "COM5", //windows
     };
@@ -47,20 +50,20 @@ public class ArduinoSerial implements SerialPortEventListener {
                 // Iterate through your host computer's serial port IDs
                 //
                 CommPortIdentifier currPortId = (CommPortIdentifier) portEnum.nextElement();
-                System.out.println( "   port" + currPortId.getName() );
-                for (String portName : PORT_NAMES) {
-                    if ( currPortId.getName().equals(portName) 
-                      || currPortId.getName().startsWith(portName)) {
-
-                        // Try to connect to the Arduino on this port
-                        //
-                        // Open serial port
-                        serialPort = (SerialPort)currPortId.open(appName, TIME_OUT);
-                        portId = currPortId;
-                        System.out.println( "Connected on port" + currPortId.getName() );
-                        break;
-                    }
+                System.out.println( "   port" + currPortId.getName());
+                if(currPortId.getName().contains("usbmodem1421")){
+                    	//int dialogResult = JOptionPane.showConfirmDialog (null, "Would you like to use " + currPortId.getName(),"Warning", JOptionPane.YES_NO_OPTION);
+                        //if(dialogResult == 0){ //they said yes to use this port, try to connect
+                         // Try to connect to the Arduino on this port
+                         //
+                         // Open serial port
+                         serialPort = (SerialPort)currPortId.open(appName, TIME_OUT);
+                         portId = currPortId;
+                         System.out.println( "Connected on port" + currPortId.getName() );
+                         break;
+                       // }
                 }
+                                   
             }
         
             if (portId == null || serialPort == null) {
@@ -160,6 +163,15 @@ public class ArduinoSerial implements SerialPortEventListener {
                     int id = input.read();
                     if(id == 2){
                      //String inputLine = input.readLine(); //00000000 green yellow red green yellow red p1 p2
+                     int sensor = input.read();
+                     System.out.println("WOAHHHH 1 " + sensor);
+                    }else if(id == 3){
+                     int sensor = input.read();
+                     System.out.println("WOAHHHH 2 " + sensor);
+                    }else if(id == 4){
+                     int sensor = input.read();
+                     System.out.println("WOAHHHH 3 " + sensor);
+                    }else if(id == 5){
                      int sensor = input.read();
                      System.out.println("WOAHHHH " + sensor);
                     }
