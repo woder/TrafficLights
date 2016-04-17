@@ -66,6 +66,13 @@ public void run() { //TODO make this relevant to the network code of the client
                     for(ClientCon p : players){ //loop over all the currently open connections looking for the clienttype of 1 (the arduino link module)
                             p.sendReset();
                     }
+                }else if(id == 0x05){
+                	byte data = in.readByte();  
+                    System.out.println("Set command received: " + data);
+                    List<ClientCon> players = (LinkedList<ClientCon>) global.players.clone();
+                    for(ClientCon p : players){ //loop over all the currently open connections looking for the clienttype of 1 (the arduino link module)
+                            p.sendSetByte(data);
+                    }
                 }
             }
         }
@@ -80,6 +87,16 @@ public void sendSet(String lights) { //method to send the set command on to ardu
 	try {
      out.writeByte(0x01);
      out.writeUTF(lights);
+     out.flush();
+    } catch (IOException e) {
+	e.printStackTrace();
+    }
+ }
+
+public void sendSetByte(byte lights) { //method to send the set command on to arduinolink modules
+	try {
+     out.writeByte(0x05);
+     out.writeByte(lights);
      out.flush();
     } catch (IOException e) {
 	e.printStackTrace();

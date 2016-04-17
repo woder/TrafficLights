@@ -33,10 +33,10 @@ public class ArduinoSerial implements SerialPortEventListener {
     
     private String appName;
     private BufferedReader input;
-    private OutputStream output;
+    public OutputStream output;
     
     private static final int TIME_OUT = 1000; // Port open timeout
-    private static final int DATA_RATE = 9600; // Arduino serial port
+    private static final int DATA_RATE = 115200; // Arduino serial port
 
     public boolean initialize() {
         try {
@@ -51,7 +51,7 @@ public class ArduinoSerial implements SerialPortEventListener {
                 //
                 CommPortIdentifier currPortId = (CommPortIdentifier) portEnum.nextElement();
                 System.out.println( "   port" + currPortId.getName());
-                if(currPortId.getName().contains("usbmodem1421")){
+                if(currPortId.getName().contains("usbmodem1411")){
                     	//int dialogResult = JOptionPane.showConfirmDialog (null, "Would you like to use " + currPortId.getName(),"Warning", JOptionPane.YES_NO_OPTION);
                         //if(dialogResult == 0){ //they said yes to use this port, try to connect
                          // Try to connect to the Arduino on this port
@@ -80,6 +80,8 @@ public class ArduinoSerial implements SerialPortEventListener {
             // add event listeners
             serialPort.addEventListener(this);
             serialPort.notifyOnDataAvailable(true);
+            
+            output = serialPort.getOutputStream();
 
             // Give the Arduino some time
             try { Thread.sleep(2000); } catch (InterruptedException ie) {}
@@ -97,7 +99,6 @@ public class ArduinoSerial implements SerialPortEventListener {
             System.out.println("Sending data: '" + data +"'");
             
             // open the streams and send the "y" character
-            output = serialPort.getOutputStream();
             output.write( data.getBytes() );
         } 
         catch (Exception e) {
@@ -106,12 +107,11 @@ public class ArduinoSerial implements SerialPortEventListener {
         }
     }
     
-    void sendByte(byte data) {
+    void sendByte(int data) {
         try {
             System.out.println("Sending data: '" + data +"'");
             
             // open the streams and send the "y" character
-            output = serialPort.getOutputStream();
             output.write(data);
         } 
         catch (Exception e) {
@@ -125,7 +125,6 @@ public class ArduinoSerial implements SerialPortEventListener {
             System.out.println("Sending data: '" + data +"'");
             
             // open the streams and send the "y" character
-            output = serialPort.getOutputStream();
             output.write(data);
         } 
         catch (Exception e) {
@@ -157,10 +156,11 @@ public class ArduinoSerial implements SerialPortEventListener {
                             new InputStreamReader(
                                     serialPort.getInputStream()));
                     }
-                    /*String lol = input.readLine();
-                    System.out.println(lol);*/
+                    String lol = input.readLine();
+                    System.out.println(lol);
                   
-                    int id = input.read();
+                    /*int id = input.read();
+                    System.out.println(id);
                     if(id == 2){
                      //String inputLine = input.readLine(); //00000000 green yellow red green yellow red p1 p2
                      int sensor = input.read();
@@ -174,7 +174,7 @@ public class ArduinoSerial implements SerialPortEventListener {
                     }else if(id == 5){
                      int sensor = input.read();
                      System.out.println("WOAHHHH " + sensor);
-                    }
+                    }*/
                     break;
 
                 default:

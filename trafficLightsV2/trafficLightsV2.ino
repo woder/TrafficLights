@@ -1,4 +1,4 @@
-int trafficLightPins[] = {4, 5, 6, 9, 10, 11, 7, 8, 12, 13}; // Vert, jaune, rouge; vert, jaune, rouge; bleu, orange; bleu, orange
+int trafficLightPins[] = {4, 5, 6, 9, 10, 11, 7, 8};//, 12, 13}; // Vert, jaune, rouge; vert, jaune, rouge; bleu, orange; bleu, orange
 int sensor1 = 2;                                             // Pin pour les senseurs sur la voie principale
 int sensor2 = 3;                                             // Pin pour les senseurs sur la voie transversale
 long previousPeds = 0;
@@ -12,6 +12,8 @@ int pedstate = 0;                                            // État de la lumi
 int ped2state = 0;                                           // État de la lumière pour piétons sur la voie transversale
 long sensorData1 = 0;                                        // État analogue du senseur piézo sur la voie principale
 long sensorData2 = 0;                                        // État analogue du senseur piézo sur la voie transversale
+byte mask = 1;
+int data = 0;
 
 void setup() {
   for(int i = 0; i < 10; i++) {
@@ -32,23 +34,25 @@ void loop() {
   
   // if serial port is available, read incoming bytes
   if (Serial.available() > 0) {
-    recv = Serial.read() - 0;
-    Serial.print("Recv: ");
-    Serial.println(recv);
     // if 'y' (decimal 121) is received, turn LED/Powertail on
     // anything other than 121 is received, turn LED/Powertail off
-    if (recv == 1){
-      String test = "";
-      test = Serial.readStringUntil('\n');
-      Serial.print("Rev: ");
-      Serial.println(test);
-      
-      for(int i = 0; i < 8; i++){
-         char number = test[i];
+         //String test = "";
+         //test = Serial.readStringUntil('\n');
+         data = Serial.read();
+         // say what you got:
+         Serial.print("I received: ");
+         Serial.println(data, DEC);
          
-         Serial.print("I: ");
-         Serial.println(number);
-         if(i == 6){
+         int c = 7;
+         for (mask = 00000001; mask>0; mask <<= 1) { //iterate through bit mask
+           if (data & mask){ // if bitwise AND resolves to true
+               digitalWrite(trafficLightPins[c],HIGH); // send 1
+           }else{ //if bitwise and resolves to false
+               digitalWrite(trafficLightPins[c],LOW); // send 0
+           }
+           c--;
+         }
+         /*if(i == 6){
            if(number == '0'){
               pedtoggle = false;
               digitalWrite(trafficLightPins[6], LOW);
@@ -71,31 +75,10 @@ void loop() {
            }else if(number == '2'){
               digitalWrite(trafficLightPins[8], LOW);
               ped2toggle = true;
-           }
-         }else{
-           if(test[i] == '1'){
-              digitalWrite(trafficLightPins[i], HIGH);
-           }else{
-              digitalWrite(trafficLightPins[i], LOW);
-           }
-         }
-      }
-    }else{
-      unsigned long timeoutTimer = millis();
-  
-      while(timeoutTimer >= 5000) {
-        for(int i = 0; i < 10; i++) {
-          digitalWrite(trafficLightPins[i], LOW);
-        }
-        delay(2500);
-        digitalWrite(trafficLightPins[2], HIGH);
-        digitalWrite(trafficLightPins[5], HIGH);
-        delay(2500);
-      }
-    }
+           }*/
   }
 
-  if(sensorCheck%1000 == 0) {
+  /*if(sensorCheck%1000 == 0) {
     sensorData1 = analogRead(sensor1);
     sensorData1 = map(sensorData1, 0, 1023, 0, 255);
     sensorData1 = constrain(sensorData1, 0, 255);
@@ -111,7 +94,7 @@ void loop() {
       Serial.write(3);
       Serial.write(sensorData2);
     }
-  }
+  }*/
 }
 
 void blinkPed1(int ped) {

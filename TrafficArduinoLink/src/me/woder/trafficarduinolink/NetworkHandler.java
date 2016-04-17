@@ -71,12 +71,20 @@ public class NetworkHandler {
 	   if(link.networkReady){
 		try {
 			byte packetid = in.readByte();
+			System.out.println("byte: " + packetid);
 			if(packetid == 1){
 				String data = in.readUTF();
-				link.aserial.sendByte((byte)0x1);
-				link.aserial.sendData(data);
+				//link.aserial.sendByte((byte)0x1);
+				//link.aserial.sendByte(0xFF);
+				//link.aserial.sendData(data);
 			}else if(packetid == 2){
 				link.aserial.sendByte((byte)0x2);
+			}else if(packetid == 5){
+				byte data = in.readByte();
+				//link.aserial.sendByte((byte)0x1);
+				System.out.println("Received byte " + data);
+				link.aserial.sendByte(data);
+				link.aserial.output.flush();
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
