@@ -15,7 +15,7 @@ private DataInputStream in;
 private DataOutputStream out;
 @SuppressWarnings("unused")
 private ConnectionManager connection;
-public byte clientType = 0x00;
+public int clientType = 0;
 
 public ClientCon(Socket client, TrafficServer global, ConnectionManager connection) {
     this.client = client;
@@ -42,11 +42,8 @@ public void run() { //TODO make this relevant to the network code of the client
         while (global.running) {
             int id = in.readByte();
             global.log.info("" + id);
-            if(clientType == 1){
-              if(id == 0x01){
-           		int sensorId = in.readInt();
-           		global.tmanager.reduceTime(sensorId);
-              }
+            if(id == 0x06){
+              this.clientType = in.readInt();
             }else if(id == 0x03){
               global.trunning = false;
               global.log.info("Tmanager stopped");

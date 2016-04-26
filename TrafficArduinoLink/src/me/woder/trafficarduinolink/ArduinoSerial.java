@@ -51,7 +51,7 @@ public class ArduinoSerial implements SerialPortEventListener {
                 //
                 CommPortIdentifier currPortId = (CommPortIdentifier) portEnum.nextElement();
                 System.out.println( "   port" + currPortId.getName());
-                if(currPortId.getName().contains("usbmodem1411")){
+                if(currPortId.getName().contains("COM4")){
                     	//int dialogResult = JOptionPane.showConfirmDialog (null, "Would you like to use " + currPortId.getName(),"Warning", JOptionPane.YES_NO_OPTION);
                         //if(dialogResult == 0){ //they said yes to use this port, try to connect
                          // Try to connect to the Arduino on this port
@@ -158,6 +158,10 @@ public class ArduinoSerial implements SerialPortEventListener {
                     }
                     String lol = input.readLine();
                     System.out.println(lol);
+                    
+                    int one = Integer.parseInt(lol);
+                    
+                    link.nethandle.sendOne(one);
                   
                     /*int id = input.read();
                     System.out.println(id);

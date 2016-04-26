@@ -67,6 +67,13 @@ public class NetworkHandler {
 		System.out.println("Server says: " + result);
 	}
 	
+	public void sendOne(int one) throws IOException{ //modify this to include some sort of ID if we want multiple lights on this server *ugh*		
+		out.writeByte(0x06); //write out that our packet id is 1
+		out.writeInt(one);
+		out.flush();
+	}
+	
+	
 	public void readDataStream(){
 	   if(link.networkReady){
 		try {
